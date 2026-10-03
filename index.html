@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- ✏️ UBAH: judul tab browser -->
+<title>Nama Lengkap Anda — Profil Pribadi</title>
+<meta name="description" content="Profil pribadi: tentang saya, hobi, daftar tugas, dan jadwal harian.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+/* ============================================================
+   1. TOKEN WARNA & UKURAN
+   ✏️ UBAH warna aksen di sini kalau ingin tema lain.
+   ============================================================ */
+:root {
+  --bg: #f8f7f3;          /* off-white */
+  --card: #ffffff;
+  --text: #2f3437;        /* abu-abu gelap */
+  --muted: #6b7378;
+  --line: #e8e6df;
+  --sage: #a9c4b0;        /* aksen sage green */
+  --sage-soft: #e6efe8;
+  --sage-deep: #4f7a5e;   /* teks/ikon aksen (kontras cukup) */
+  --sky: #dcebf5;         /* aksen biru muda */
+  --mint: #dff3ea;
+  --radius: 22px;
+  --shadow: 0 6px 24px rgba(47, 52, 55, .07);
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #1b1e1f; --card: #25292b; --text: #eceeed; --muted: #a2abaf;
+    --line: #343a3d; --sage-soft: #2b3a30; --sage-deep: #9fd0ae;
+    --sky: #26363f; --mint: #26382f; --shadow: 0 6px 24px rgba(0,0,0,.3);
+  }
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; scroll-padding-top: 76px; }
+body {
+  font-family: "Plus Jakarta Sans", system-ui, sans-serif;
+  background: var(--bg); color: var(--text);
+  line-height: 1.65; -webkit-font-smoothing: antialiased;
+}
+a { color: inherit; text-decoration: none; }
+:focus-visible { outline: 3px solid var(--sage-deep); outline-offset: 3px; border-radius: 8px; }
+.wrap { width: min(920px, 100% - 2.5rem); margin-inline: auto; }
+section { padding: 3rem 0 1rem; }
+h2 { font-size: 1.5rem; font-weight: 800; letter-spacing: -.02em; margin-bottom: 1.1rem; }
+.card {
+  background: var(--card); border: 1px solid var(--line);
+  border-radius: var(--radius); box-shadow: var(--shadow); padding: 1.5rem;
+}
+
+/* ============================================================
+   2. NAVIGASI
+   ============================================================ */
+.nav {
+  position: sticky; top: 0; z-index: 10;
+  background: color-mix(in srgb, var(--bg) 85%, transparent);
+  backdrop-filter: blur(10px); border-bottom: 1px solid var(--line);
+}
+.nav .wrap { display: flex; align-items: center; justify-content: space-between; height: 60px; }
+.nav b { font-weight: 800; }
+.nav ul { display: flex; gap: .25rem; list-style: none; overflow-x: auto; }
+.nav li a {
+  display: block; padding: .4rem .8rem; border-radius: 999px;
+  font-size: .9rem; font-weight: 600; color: var(--muted); white-space: nowrap;
+  transition: background .2s, color .2s;
+}
+.nav li a:hover { background: var(--sage-soft); color: var(--sage-deep); }
+@media (max-width: 560px) { .nav b { display: none; } }
+
+/* ============================================================
+   3. HERO
+   ============================================================ */
+.hero { padding-top: 3.5rem; }
+.hero .card {
+  display: grid; grid-template-columns: auto 1fr; gap: 2rem; align-items: center;
+  background: linear-gradient(135deg, var(--sage-soft), var(--sky));
+  padding: 2.25rem;
+}
+.avatar {
+  width: 168px; height: 168px; border-radius: 40px; /* ✏️ ubah ke 50% untuk bentuk lingkaran */
+  object-fit: cover; border: 5px solid var(--card);
+  box-shadow: var(--shadow); background: var(--card);
+}
+.hero h1 { font-size: clamp(1.9rem, 5vw, 2.8rem); font-weight: 800; letter-spacing: -.03em; line-height: 1.15; }
+.status { margin: .35rem 0 .9rem; color: var(--sage-deep); font-weight: 700; }
+.bio { color: var(--muted); max-width: 52ch; margin-bottom: 1.3rem; }
+.socials { display: flex; gap: .7rem; flex-wrap: wrap; }
+.btn {
+  display: inline-flex; align-items: center; gap: .55rem;
+  padding: .65rem 1.1rem; border-radius: 999px;
+  background: var(--card); border: 1px solid var(--line);
+  font-weight: 700; font-size: .92rem; box-shadow: var(--shadow);
+  transition: transform .2s, background .2s;
+}
+.btn:hover { transform: translateY(-2px); background: var(--sage-soft); }
+.btn svg { width: 20px; height: 20px; fill: currentColor; }
+@media (max-width: 640px) {
+  .hero .card { grid-template-columns: 1fr; text-align: center; justify-items: center; padding: 1.75rem 1.25rem; }
+  .socials { justify-content: center; }
+}
+
+/* ============================================================
+   4. TENTANG & HOBI
+   ============================================================ */
+.about p + p { margin-top: .8rem; }
+.about p { color: var(--muted); }
+.hobbies { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 1rem; }
+.hobby { text-align: center; padding: 1.4rem 1rem; }
+.hobby .emoji {
+  display: grid; place-items: center; width: 56px; height: 56px; margin: 0 auto .7rem;
+  border-radius: 18px; font-size: 1.7rem; background: var(--mint);
+}
+.hobby:nth-child(even) .emoji { background: var(--sky); }
+.hobby h3 { font-size: 1rem; }
+.hobby p { font-size: .85rem; color: var(--muted); }
+
+/* ============================================================
+   5. TO-DO LIST
+   ============================================================ */
+.todo-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; gap: 1rem; }
+.counter { font-size: .85rem; font-weight: 700; color: var(--sage-deep); background: var(--sage-soft); padding: .25rem .8rem; border-radius: 999px; white-space: nowrap; }
+.todo-form { display: flex; gap: .6rem; margin-bottom: 1rem; }
+.todo-form input {
+  flex: 1; min-width: 0; padding: .75rem 1rem; border-radius: 14px;
+  border: 1px solid var(--line); background: var(--bg); color: var(--text);
+  font: inherit;
+}
+.todo-form button {
+  padding: 0 1.2rem; border: 0; border-radius: 14px; cursor: pointer;
+  background: var(--sage-deep); color: #fff; font: inherit; font-weight: 700;
+}
+@media (prefers-color-scheme: dark) { .todo-form button { color: #14201a; } }
+.todo-form button:hover { filter: brightness(1.1); }
+#todoList { list-style: none; display: grid; gap: .5rem; }
+.task {
+  display: flex; align-items: center; gap: .8rem; padding: .75rem .9rem;
+  border-radius: 14px; background: var(--bg); border: 1px solid var(--line);
+  transition: background .25s, opacity .25s;
+}
+.task input { width: 20px; height: 20px; accent-color: var(--sage-deep); cursor: pointer; flex-shrink: 0; }
+.task label { flex: 1; cursor: pointer; word-break: break-word; }
+.task.done { background: var(--sage-soft); }
+.task.done label { text-decoration: line-through; color: var(--muted); }
+.task .del { border: 0; background: none; color: var(--muted); font-size: 1.2rem; cursor: pointer; padding: .1rem .5rem; border-radius: 8px; }
+.task .del:hover { color: #c0504d; background: var(--card); }
+.empty { text-align: center; color: var(--muted); padding: 1rem 0 .3rem; }
+
+/* ============================================================
+   6. JADWAL (TIMELINE)
+   ============================================================ */
+.timeline { list-style: none; position: relative; padding-left: 1.6rem; }
+.timeline::before { content: ""; position: absolute; left: 6px; top: 8px; bottom: 8px; width: 2px; background: var(--sage); border-radius: 2px; }
+.timeline li { position: relative; display: grid; grid-template-columns: 110px 1fr; gap: 1rem; padding: .7rem 0; }
+.timeline li::before {
+  content: ""; position: absolute; left: -1.6rem; top: 1.05rem; width: 14px; height: 14px;
+  border-radius: 50%; background: var(--card); border: 3px solid var(--sage-deep);
+}
+.time { font-weight: 800; color: var(--sage-deep); font-variant-numeric: tabular-nums; }
+.timeline h3 { font-size: 1rem; }
+.timeline p { font-size: .88rem; color: var(--muted); }
+@media (max-width: 480px) { .timeline li { grid-template-columns: 1fr; gap: 0; } }
+
+/* ============================================================
+   7. FOOTER
+   ============================================================ */
+footer { margin-top: 4rem; padding: 2rem 0 2.5rem; border-top: 1px solid var(--line); text-align: center; color: var(--muted); font-size: .9rem; }
+footer .links { display: flex; justify-content: center; gap: 1.2rem; margin-bottom: .8rem; }
+footer .links a { font-weight: 700; color: var(--text); display: inline-flex; gap: .4rem; align-items: center; }
+footer .links a:hover { color: var(--sage-deep); }
+footer svg { width: 18px; height: 18px; fill: currentColor; }
+
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; scroll-behavior: auto !important; } }
+</style>
+</head>
+
+<body>
+
+<!-- Ikon sosial media (dipakai ulang di hero & footer) -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-ig" viewBox="0 0 24 24"><path d="M7 2h10a5 5 0 0 1 5 5v10a5 5 0 0 1-5 5H7a5 5 0 0 1-5-5V7a5 5 0 0 1 5-5zm0 2a3 3 0 0 0-3 3v10a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3V7a3 3 0 0 0-3-3H7zm5 3.5a4.5 4.5 0 1 1 0 9 4.5 4.5 0 0 1 0-9zm0 2a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5zM17.3 5.9a1.1 1.1 0 1 1 0 2.2 1.1 1.1 0 0 1 0-2.2z"/></symbol>
+  <symbol id="i-tt" viewBox="0 0 24 24"><path d="M19.6 6.7a4.8 4.8 0 0 1-3.8-4.2V2h-3.4v13.4a2.9 2.9 0 1 1-2-2.8V9.1a6.3 6.3 0 1 0 5.4 6.2V8.9a8.2 8.2 0 0 0 4.8 1.5V7a4.8 4.8 0 0 1-1-.3z"/></symbol>
+</svg>
+
+<!-- ======================== NAVIGASI ======================== -->
+<nav class="nav" aria-label="Navigasi utama">
+  <div class="wrap">
+    <b>👋 Halo Cah!</b>
+    <ul>
+      <li><a href="#tentang">Tentang</a></li>
+      <li><a href="#hobi">Hobi</a></li>
+      <li><a href="#tugas">Tugas</a></li>
+      <li><a href="#jadwal">Jadwal</a></li>
+    </ul>
+  </div>
+</nav>
+
+<main class="wrap">
+
+  <!-- ======================== HERO ======================== -->
+  <header class="hero">
+    <div class="card">
+      <!-- ✏️ UBAH FOTO: ganti src dengan nama file fotomu (mis. "foto.jpg" di folder yang sama).
+           Sementara ini memakai gambar placeholder berinisial. -->
+      <img class="avatar" id="avatar" alt="Foto profil"
+           src="Profil tama.jpg">
+      <div>
+        <!-- ✏️ UBAH: nama, status, dan bio -->
+        <h1>Adyatama Prawisa Viollentino</h1>
+        <p class="status">Mahasiswa · Gamer · Hiking</p>
+        <p class="bio">Halo, selamat datang di halaman pribadiku! Di sini kamu bisa kenal aku lebih dekat — dari hobi, tugas yang lagi dikerjakan, sampai rutinitas harianku.</p>
+        <div class="socials">
+          <!-- ✏️ Tautan sosial media diatur lewat variabel SOCIAL di bagian <script> paling bawah -->
+          <a class="btn" data-social="instagram" target="_blank" rel="noopener noreferrer"><svg><use href="#i-ig"/></svg>Instagram</a>
+          <a class="btn" data-social="tiktok" target="_blank" rel="noopener noreferrer"><svg><use href="#i-tt"/></svg>TikTok</a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ======================== TENTANG ======================== -->
+  <section id="tentang">
+    <h2>Tentang saya</h2>
+    <div class="card about">
+      <!-- ✏️ UBAH: ceritakan latar belakang, minat, dan fokusmu -->
+      <p>Saya seorang mahasiswa yang suka belajar hal baru, terutama seputar teknologi, desain, dan pembuatan konten. Saya percaya hal-hal sederhana yang dikerjakan dengan rapi bisa memberi dampak besar.</p>
+      <p>Saat ini saya sedang fokus menyelesaikan perkuliahan, memperdalam kemampuan membuat website, dan rutin membuat konten di media sosial.</p>
+    </div>
+  </section>
+
+  <!-- ======================== HOBI ======================== -->
+  <section id="hobi">
+    <h2>Hobi saya</h2>
+    <!-- ✏️ UBAH: ganti emoji, judul, dan deskripsi. Salin satu blok <article> untuk menambah hobi. -->
+    <div class="hobbies">
+      <article class="card hobby"><div class="emoji">🎧</div><h3>Mendengarkan musik</h3><p>Teman setia saat belajar dan santai.</p></article>
+      <article class="card hobby"><div class="emoji">📸</div><h3>Membuat konten</h3><p>Foto dan video pendek untuk dibagikan.</p></article>
+      <article class="card hobby"><div class="emoji">💻</div><h3>Ngoding</h3><p>Bereksperimen membuat website kecil.</p></article>
+      <article class="card hobby"><div class="emoji">📚</div><h3>Membaca</h3><p>Novel, artikel, dan catatan menarik.</p></article>
+      <article class="card hobby"><div class="emoji">☕</div><h3>Ngopi santai</h3><p>Mencari kafe dengan suasana tenang.</p></article>
+      <article class="card hobby"><div class="emoji">🎮</div><h3>Bermain game</h3><p>Pelepas penat di akhir pekan.</p></article>
+    </div>
+  </section>
+
+  <!-- ======================== TO-DO LIST ======================== -->
+  <section id="tugas">
+    <h2>Tugas yang belum selesai</h2>
+    <div class="card">
+      <div class="todo-top">
+        <span class="muted" style="color:var(--muted);font-size:.9rem">Centang jika sudah selesai, atau tambah tugas baru.</span>
+        <span class="counter" id="counter">0 tersisa</span>
+      </div>
+      <form class="todo-form" id="todoForm">
+        <input type="text" id="todoInput" placeholder="Tulis tugas baru…" aria-label="Tugas baru" maxlength="120" autocomplete="off">
+        <button type="submit">Tambah</button>
+      </form>
+      <ul id="todoList"></ul>
+      <p class="empty" id="empty" hidden>Semua tugas selesai. Tambah tugas baru di atas.</p>
+    </div>
+  </section>
+
+  <!-- ======================== JADWAL ======================== -->
+  <section id="jadwal">
+    <h2>Jadwal kegiatan harian</h2>
+    <div class="card">
+      <!-- ✏️ UBAH: jam & kegiatan. Salin satu <li> untuk menambah baris. -->
+      <ol class="timeline">
+        <li><span class="time">05.00</span><div><h3>Bangun &amp; ibadah</h3><p>Mulai hari dengan tenang.</p></div></li>
+        <li><span class="time">06.00</span><div><h3>Olahraga ringan</h3><p>Jalan pagi atau peregangan.</p></div></li>
+        <li><span class="time">07.30</span><div><h3>Sarapan &amp; bersiap</h3><p>Berangkat ke kampus.</p></div></li>
+        <li><span class="time">08.30 – 15.00</span><div><h3>Kuliah / kegiatan kampus</h3><p>Kelas, diskusi, dan tugas kelompok.</p></div></li>
+        <li><span class="time">16.00</span><div><h3>Istirahat &amp; santai</h3><p>Ngopi atau main game sebentar.</p></div></li>
+        <li><span class="time">19.00</span><div><h3>Mengerjakan tugas</h3><p>Fokus menyelesaikan to-do list.</p></div></li>
+        <li><span class="time">21.00</span><div><h3>Membuat konten</h3><p>Edit dan unggah ke media sosial.</p></div></li>
+        <li><span class="time">22.30</span><div><h3>Istirahat</h3><p>Tidur cukup untuk esok hari.</p></div></li>
+      </ol>
+    </div>
+  </section>
+</main>
+
+<!-- ======================== FOOTER ======================== -->
+<footer>
+  <div class="links">
+    <a data-social="instagram" target="_blank" rel="noopener noreferrer"><svg><use href="#i-ig"/></svg>Instagram</a>
+    <a data-social="tiktok" target="_blank" rel="noopener noreferrer"><svg><use href="#i-tt"/></svg>TikTok</a>
+  </div>
+  <!-- ✏️ UBAH: nama di hak cipta. Tahun terisi otomatis. -->
+  <p>© <span id="year"></span> Nama Lengkap Anda. Semua hak dilindungi.</p>
+</footer>
+
+<script>
+/* ============================================================
+   ✏️ PENGATURAN SOSIAL MEDIA — GANTI DI SINI SAJA
+   Cukup edit dua tautan di bawah; tombol di hero & footer ikut berubah.
+   ============================================================ */
+const SOCIAL = {
+  instagram: "https://www.instagram.com/viollentino_?stkn=MXhzYjA3czcxNmlnbA==",
+  tiktok:    "https://www.tiktok.com/@lennnygy?_r=1&_t=ZS-9AFXzobp380"
+};
+document.querySelectorAll("[data-social]").forEach(a => a.href = SOCIAL[a.dataset.social]);
+document.getElementById("year").textContent = new Date().getFullYear();
+
+/* ============================================================
+   TO-DO LIST
+   ✏️ Daftar awal bisa diubah di array DEFAULT_TASKS.
+   Perubahan disimpan otomatis di browser (localStorage).
+   ============================================================ */
+const DEFAULT_TASKS = [
+  { text: "Menyelesaikan tugas kuliah", done: false },
+  { text: "Edit video untuk TikTok",    done: false },
+  { text: "Belajar JavaScript 30 menit", done: false },
+  { text: "Merapikan catatan kuliah",   done: true  }
+];
+const KEY = "todo-profil-v1";
+const list = document.getElementById("todoList");
+const input = document.getElementById("todoInput");
+const counter = document.getElementById("counter");
+const empty = document.getElementById("empty");
+
+let tasks;
+try { tasks = JSON.parse(localStorage.getItem(KEY)) || DEFAULT_TASKS; }
+catch { tasks = DEFAULT_TASKS; }
+
+function save() { try { localStorage.setItem(KEY, JSON.stringify(tasks)); } catch {} }
+
+function render() {
+  list.innerHTML = "";
+  tasks.forEach((t, i) => {
+    const li = document.createElement("li");
+    li.className = "task" + (t.done ? " done" : "");
+    li.innerHTML = `<input type="checkbox" id="t${i}" ${t.done ? "checked" : ""}>
+                    <label for="t${i}"></label>
+                    <button class="del" aria-label="Hapus tugas">×</button>`;
+    li.querySelector("label").textContent = t.text; // textContent = aman dari injeksi HTML
+    li.querySelector("input").onchange = e => { t.done = e.target.checked; save(); render(); };
+    li.querySelector(".del").onclick = () => { tasks.splice(i, 1); save(); render(); };
+    list.appendChild(li);
+  });
+  const left = tasks.filter(t => !t.done).length;
+  counter.textContent = left + " tersisa";
+  empty.hidden = left !== 0 || tasks.length === 0 ? true : false;
+  if (tasks.length === 0) { empty.hidden = false; empty.textContent = "Belum ada tugas. Tambah satu di atas."; }
+  else if (left === 0) { empty.hidden = false; empty.textContent = "Semua tugas selesai. Kerja bagus!"; }
+}
+
+document.getElementById("todoForm").addEventListener("submit", e => {
+  e.preventDefault();
+  const text = input.value.trim();
+  if (!text) return;
+  tasks.unshift({ text, done: false });
+  input.value = "";
+  save(); render();
+});
+render();
+</script>
+</body>
+</html>
