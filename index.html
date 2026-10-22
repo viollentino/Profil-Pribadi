@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <!-- ✏️ UBAH: judul tab browser -->
 <title>Adyatama Prawisa Viollentino — Profil Pribadi</title>
-<meta name="description" content="Profil pribadi: tentang saya, hobi, daftar tugas, pengeluaran, portofolio, dan jadwal harian.">
+<meta name="description" content="Profil pribadi: tentang saya, hobi, daftar tugas, keuangan, portofolio, dan jadwal harian.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -136,7 +136,7 @@ h2 { font-size: 1.5rem; font-weight: 800; letter-spacing: -.02em; margin-bottom:
 .todo-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; gap: 1rem; }
 .counter { font-size: .85rem; font-weight: 700; color: var(--sage-deep); background: var(--sage-soft); padding: .25rem .8rem; border-radius: 999px; white-space: nowrap; }
 
-/* Kolom input yang dipakai bersama (tugas & pengeluaran) */
+/* Kolom input yang dipakai bersama (tugas & keuangan) */
 .field {
   min-width: 0; padding: .75rem 1rem; border-radius: 14px;
   border: 1px solid var(--line); background: var(--bg); color: var(--text);
@@ -178,19 +178,37 @@ h2 { font-size: 1.5rem; font-weight: 800; letter-spacing: -.02em; margin-bottom:
 .due.none { background: var(--line); color: var(--muted); }
 
 /* ============================================================
-   6. PENGELUARAN
+   6. KEUANGAN (pemasukan, pengeluaran, tabungan)
    ============================================================ */
 .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 1.25rem; }
 .stat { padding: 1.1rem 1.25rem; border-radius: 18px; background: var(--sage-soft); }
 .stat:nth-child(even) { background: var(--sky); }
 .stat small { display: block; color: var(--muted); font-weight: 600; font-size: .85rem; }
 .stat strong { font-size: 1.55rem; font-weight: 800; letter-spacing: -.02em; color: var(--sage-deep); font-variant-numeric: tabular-nums; }
+.stat strong.neg { color: var(--late); }
+.stat strong.pos { color: var(--ok); }
 
 .exp-form { display: flex; gap: .6rem; flex-wrap: wrap; align-items: flex-end; margin-bottom: 1.25rem; }
+.exp-form .full { flex: 1 1 100%; }
 .exp-form .grow { flex: 1 1 180px; }
 .exp-form .grow .field { width: 100%; }
 .exp-form .amount { flex: 0 1 170px; }
 .exp-form .amount .field { width: 100%; }
+
+/* Tombol pilihan cepat (shortcut) */
+.chips { display: flex; flex-wrap: wrap; gap: .45rem; margin-top: .15rem; }
+.chip {
+  border: 1px solid var(--line); background: var(--bg); color: var(--text);
+  font: inherit; font-weight: 600; font-size: .86rem;
+  padding: .4rem .9rem; border-radius: 999px; cursor: pointer;
+  transition: background .2s, color .2s, transform .15s;
+}
+.chip:hover { background: var(--sage-soft); transform: translateY(-1px); }
+.chip[aria-pressed="true"] { background: var(--sage-deep); border-color: var(--sage-deep); color: #fff; }
+@media (prefers-color-scheme: dark) { .chip[aria-pressed="true"] { color: #2a1214; } }
+.pill { font-size: .82rem; font-weight: 700; padding: .25rem .8rem; border-radius: 999px; background: var(--mint); color: var(--sage-deep); font-variant-numeric: tabular-nums; }
+.breakdown-wrap { margin-bottom: 1.25rem; }
+.breakdown-wrap small { display: block; color: var(--muted); font-weight: 700; font-size: .78rem; }
 
 .tabs { display: inline-flex; gap: .25rem; padding: .25rem; border-radius: 999px; background: var(--bg); border: 1px solid var(--line); }
 .tabs button {
@@ -296,7 +314,7 @@ body.logged-in .gate { display: none; }
 <div class="gate" id="authGate">
   <form class="card gate-card" id="authForm">
     <h2>Masuk</h2>
-    <p>Login agar tugas dan pengeluaranmu tersimpan di semua perangkat.</p>
+    <p>Login agar tugas dan keuanganmu tersimpan di semua perangkat.</p>
     <label class="field-label">Email
       <input class="field" type="email" id="authEmail" required autocomplete="email">
     </label>
@@ -325,7 +343,10 @@ body.logged-in .gate { display: none; }
       <li><a href="#tentang">Tentang</a></li>
       <li><a href="#hobi">Hobi</a></li>
       <li><a href="#tugas">Tugas</a></li>
+      <li><a href="#ringkasan">Keuangan</a></li>
+      <li><a href="#pemasukan">Pemasukan</a></li>
       <li><a href="#pengeluaran">Pengeluaran</a></li>
+      <li><a href="#tabungan">Tabungan</a></li>
       <li><a href="#portofolio">Portofolio</a></li>
       <li><a href="#jadwal">Jadwal</a></li>
     </ul>
@@ -344,7 +365,7 @@ body.logged-in .gate { display: none; }
         <!-- ✏️ UBAH: nama, status, dan bio -->
         <h1>Adyatama Prawisa Viollentino</h1>
         <p class="status">Mahasiswa · Gamer · Climber</p>
-        <p class="bio">Halo, selamat datang di halaman pribadiku! Di sini kamu bisa kenal aku lebih dekat — dari hobi, tugas yang lagi dikerjakan, pengeluaran, sampai jadwal harianku.</p>
+        <p class="bio">Halo, selamat datang di halaman pribadiku! Di sini kamu bisa kenal aku lebih dekat — dari hobi, tugas yang lagi dikerjakan, keuangan, sampai jadwal harianku.</p>
         <div class="socials">
           <!-- ✏️ Tautan sosial media diatur lewat variabel SOCIAL di bagian <script> paling bawah -->
           <a class="btn" data-social="instagram" target="_blank" rel="noopener noreferrer"><svg><use href="#i-ig"/></svg>Instagram</a>
@@ -400,40 +421,31 @@ body.logged-in .gate { display: none; }
     </div>
   </section>
 
+  <!-- ======================== RINGKASAN KEUANGAN ======================== -->
+  <section id="ringkasan">
+    <h2>Ringkasan keuangan</h2>
+    <div class="card">
+      <p style="color:var(--muted);font-size:.9rem;margin-bottom:1rem" id="summaryLabel">Bulan ini</p>
+      <div class="stats" id="summary" style="margin-bottom:0"></div>
+    </div>
+  </section>
+
+  <!-- ======================== PEMASUKAN ======================== -->
+  <section id="pemasukan">
+    <h2>Pemasukan</h2>
+    <div class="card" id="ledger-income"></div>
+  </section>
+
   <!-- ======================== PENGELUARAN ======================== -->
   <section id="pengeluaran">
     <h2>Pengeluaran</h2>
-    <div class="card">
-      <div class="stats">
-        <div class="stat"><small>Hari ini</small><strong id="statDay">Rp0</strong></div>
-        <div class="stat"><small id="statMonthLabel">Bulan ini</small><strong id="statMonth">Rp0</strong></div>
-      </div>
+    <div class="card" id="ledger-expense"></div>
+  </section>
 
-      <form class="exp-form" id="expForm">
-        <label class="field-label grow">Keterangan
-          <input class="field" type="text" id="expNote" placeholder="Contoh: makan siang" maxlength="80" autocomplete="off">
-        </label>
-        <label class="field-label amount">Nominal (Rp)
-          <input class="field" type="number" id="expAmount" placeholder="15000" min="1" step="1" inputmode="numeric">
-        </label>
-        <label class="field-label">Tanggal
-          <input class="field" type="date" id="expDate">
-        </label>
-        <button class="submit" type="submit">Tambah</button>
-      </form>
-
-      <div class="exp-bar">
-        <div class="tabs" role="group" aria-label="Tampilan pengeluaran">
-          <button type="button" id="tabDay" aria-pressed="true">Harian</button>
-          <button type="button" id="tabMonth" aria-pressed="false">Bulanan</button>
-        </div>
-        <label class="field-label" id="monthPick">Bulan
-          <input class="field" type="month" id="expMonth">
-        </label>
-      </div>
-
-      <div id="expView"></div>
-    </div>
+  <!-- ======================== TABUNGAN ======================== -->
+  <section id="tabungan">
+    <h2>Tabungan</h2>
+    <div class="card" id="ledger-saving"></div>
   </section>
 
   <!-- ======================== PORTOFOLIO ======================== -->
@@ -589,114 +601,235 @@ document.getElementById("todoForm").addEventListener("submit", e => {
 renderTasks();
 
 /* ============================================================
-   PENGELUARAN HARIAN / BULANAN
-   Data: { id, note, amount, date }  →  disimpan di localStorage + cloud.
+   KEUANGAN: PEMASUKAN, PENGELUARAN, TABUNGAN
+   Satu "mesin" dipakai untuk ketiganya. Data: { id, note, src, amount, date }
+   Disimpan di localStorage + cloud.
+
+   ✏️ UBAH SHORTCUT DI SINI. Format tiap tombol: ["emoji", "nama"]
+   Tambah / hapus baris sesuka hati.
+   target: "note" → tombol mengisi kolom Keterangan (dipakai pengeluaran)
+           "src"  → tombol memilih sumber/tempat; keterangan jadi opsional
    ============================================================ */
-const EXP_KEY = "pengeluaran-profil-v1";
-let expenses = loadJSON(EXP_KEY, []);
-const saveExp = () => { saveJSON(EXP_KEY, expenses); pushCloud(); };
-
-const expNote = document.getElementById("expNote");
-const expAmount = document.getElementById("expAmount");
-const expDate = document.getElementById("expDate");
-const expMonth = document.getElementById("expMonth");
-const expView = document.getElementById("expView");
-const monthPick = document.getElementById("monthPick");
-const tabDay = document.getElementById("tabDay");
-const tabMonth = document.getElementById("tabMonth");
-let view = "day";
-
-expDate.value = todayISO();
-expMonth.value = todayISO().slice(0, 7);
-
-const sumBy = pred => expenses.filter(pred).reduce((s, x) => s + x.amount, 0);
-
-function renderStats() {
-  const today = todayISO();
-  const ym = expMonth.value || today.slice(0, 7);
-  document.getElementById("statDay").textContent = rupiah(sumBy(x => x.date === today));
-  document.getElementById("statMonth").textContent = rupiah(sumBy(x => x.date.startsWith(ym)));
-  document.getElementById("statMonthLabel").textContent = "Total " + fmtMonth(ym);
-}
-
-function renderDaily() {
-  const ym = expMonth.value || todayISO().slice(0, 7);
-  const inMonth = expenses.filter(x => x.date.startsWith(ym));
-  expView.innerHTML = "";
-  if (!inMonth.length) {
-    expView.appendChild(el("p", "empty", "Belum ada pengeluaran di " + fmtMonth(ym) + ". Tambahkan lewat formulir di atas."));
-    return;
+const LEDGERS = {
+  income: {
+    key: "pemasukan-profil-v1", target: "src",
+    chipLabel: "Masuk ke e-wallet / rekening apa?",
+    chips: [["💙", "DANA"], ["🌊", "SeaBank"], ["🧡", "ShopeePay"], ["💚", "GoPay"], ["💵", "Tunai"]],
+    noteLabel: "Keterangan (opsional)", placeholder: "Contoh: uang saku, gaji", amountPh: "500000"
+  },
+  expense: {
+    key: "pengeluaran-profil-v1", target: "note",
+    chipLabel: "Pilih cepat",
+    chips: [["🍚", "Makan"], ["☕", "Ngopi"], ["🍿", "Jajan"], ["🛵", "Transportasi"]],
+    noteLabel: "Keterangan", placeholder: "Contoh: makan siang", amountPh: "15000"
+  },
+  saving: {
+    key: "tabungan-profil-v1", target: "src",
+    chipLabel: "Ditabung di mana?",
+    chips: [["💙", "DANA"], ["🧡", "ShopeePay"], ["🌊", "SeaBank"]],
+    noteLabel: "Keterangan (opsional)", placeholder: "Contoh: nabung dana darurat", amountPh: "50000",
+    total: "Total tabungan", breakdown: true
   }
-  const byDate = {};
-  inMonth.forEach(x => (byDate[x.date] = byDate[x.date] || []).push(x));
-  Object.keys(byDate).sort().reverse().forEach(d => {
-    const group = el("div", "day");
-    const total = byDate[d].reduce((s, x) => s + x.amount, 0);
-    const head = el("div", "day-head");
-    head.append(el("span", "", fmtDay(d)), el("span", "", rupiah(total)));
-    const ul = el("ul", "exp-list");
-    byDate[d].forEach(x => {
-      const li = el("li", "exp-item");
-      const del = el("button", "del", "×"); del.type = "button"; del.setAttribute("aria-label", "Hapus pengeluaran");
-      del.onclick = () => { expenses = expenses.filter(e => e.id !== x.id); saveExp(); renderExp(); };
-      li.append(el("span", "note", x.note), el("span", "amt", rupiah(x.amount)), del);
-      ul.appendChild(li);
+};
+
+const store = {
+  income:  loadJSON(LEDGERS.income.key,  []),
+  expense: loadJSON(LEDGERS.expense.key, []),
+  saving:  loadJSON(LEDGERS.saving.key,  [])
+};
+const ledgers = {};
+const sumOf = (arr, pred) => arr.filter(pred).reduce((s, x) => s + x.amount, 0);
+
+function createLedger(type, cfg) {
+  const root = document.getElementById("ledger-" + type);
+  const k = s => type + "-" + s;
+  const $ = s => document.getElementById(k(s));
+
+  root.innerHTML = `
+    <div class="stats">
+      <div class="stat"><small>Hari ini</small><strong id="${k("day")}">Rp0</strong></div>
+      <div class="stat"><small id="${k("monthLabel")}">Bulan ini</small><strong id="${k("month")}">Rp0</strong></div>
+      ${cfg.total ? `<div class="stat"><small>${cfg.total}</small><strong id="${k("all")}">Rp0</strong></div>` : ""}
+    </div>
+    ${cfg.breakdown ? `<div class="breakdown-wrap" id="${k("bwrap")}" hidden><small>Tabungan per tempat</small><div class="chips" id="${k("breakdown")}"></div></div>` : ""}
+    <form class="exp-form" id="${k("form")}">
+      <div class="field-label full">${cfg.chipLabel}<div class="chips" id="${k("chips")}"></div></div>
+      <label class="field-label grow">${cfg.noteLabel}
+        <input class="field" type="text" id="${k("note")}" placeholder="${cfg.placeholder}" maxlength="80" autocomplete="off">
+      </label>
+      <label class="field-label amount">Nominal (Rp)
+        <input class="field" type="number" id="${k("amount")}" placeholder="${cfg.amountPh}" min="1" step="1" inputmode="numeric">
+      </label>
+      <label class="field-label">Tanggal
+        <input class="field" type="date" id="${k("date")}">
+      </label>
+      <button class="submit" type="submit">Tambah</button>
+    </form>
+    <div class="exp-bar">
+      <div class="tabs" role="group" aria-label="Tampilan">
+        <button type="button" id="${k("tabDay")}" aria-pressed="true">Harian</button>
+        <button type="button" id="${k("tabMonth")}" aria-pressed="false">Bulanan</button>
+      </div>
+      <label class="field-label" id="${k("monthPick")}">Bulan
+        <input class="field" type="month" id="${k("monthIn")}">
+      </label>
+    </div>
+    <div id="${k("view")}"></div>`;
+
+  const noteIn = $("note"), amountIn = $("amount"), dateIn = $("date"), monthIn = $("monthIn");
+  const chipBox = $("chips"), viewBox = $("view");
+  let view = "day", src = "";
+  const data = () => store[type];
+  const label = x => cfg.target === "src" ? [x.src, x.note].filter(Boolean).join(" · ") : x.note;
+
+  dateIn.value = todayISO();
+  monthIn.value = todayISO().slice(0, 7);
+
+  // ----- tombol shortcut -----
+  function syncChips() {
+    const cur = (cfg.target === "src" ? src : noteIn.value.trim()).toLowerCase();
+    chipBox.querySelectorAll(".chip").forEach(b =>
+      b.setAttribute("aria-pressed", String(b.dataset.v.toLowerCase() === cur && cur !== "")));
+  }
+  cfg.chips.forEach(([icon, name]) => {
+    const b = el("button", "chip", icon + " " + name);
+    b.type = "button"; b.dataset.v = name; b.setAttribute("aria-pressed", "false");
+    b.onclick = () => {
+      if (cfg.target === "note") { noteIn.value = name; }
+      else { src = (src === name) ? "" : name; }
+      syncChips();
+      if (cfg.target === "note" || src) amountIn.focus();
+    };
+    chipBox.appendChild(b);
+  });
+  if (cfg.target === "note") noteIn.addEventListener("input", syncChips);
+
+  // ----- statistik -----
+  function renderStats() {
+    const today = todayISO();
+    const ym = monthIn.value || today.slice(0, 7);
+    $("day").textContent = rupiah(sumOf(data(), x => x.date === today));
+    $("month").textContent = rupiah(sumOf(data(), x => x.date.startsWith(ym)));
+    $("monthLabel").textContent = "Total " + fmtMonth(ym);
+    if (cfg.total) $("all").textContent = rupiah(sumOf(data(), () => true));
+    if (cfg.breakdown) {
+      const box = $("breakdown"); box.innerHTML = "";
+      const by = {};
+      data().forEach(x => { const s = x.src || "Lainnya"; by[s] = (by[s] || 0) + x.amount; });
+      const rows = Object.entries(by).sort((a, b) => b[1] - a[1]);
+      rows.forEach(([s, v]) => box.appendChild(el("span", "pill", s + ": " + rupiah(v))));
+      $("bwrap").hidden = rows.length === 0;
+    }
+  }
+
+  // ----- tampilan harian -----
+  function renderDaily() {
+    const ym = monthIn.value || todayISO().slice(0, 7);
+    const inMonth = data().filter(x => x.date.startsWith(ym));
+    viewBox.innerHTML = "";
+    if (!inMonth.length) {
+      viewBox.appendChild(el("p", "empty", "Belum ada data di " + fmtMonth(ym) + ". Tambahkan lewat formulir di atas."));
+      return;
+    }
+    const byDate = {};
+    inMonth.forEach(x => (byDate[x.date] = byDate[x.date] || []).push(x));
+    Object.keys(byDate).sort().reverse().forEach(d => {
+      const group = el("div", "day");
+      const total = byDate[d].reduce((s, x) => s + x.amount, 0);
+      const head = el("div", "day-head");
+      head.append(el("span", "", fmtDay(d)), el("span", "", rupiah(total)));
+      const ul = el("ul", "exp-list");
+      byDate[d].forEach(x => {
+        const li = el("li", "exp-item");
+        const del = el("button", "del", "×"); del.type = "button"; del.setAttribute("aria-label", "Hapus");
+        del.onclick = () => { store[type] = data().filter(e => e.id !== x.id); save(); render(); };
+        li.append(el("span", "note", label(x)), el("span", "amt", rupiah(x.amount)), del);
+        ul.appendChild(li);
+      });
+      group.append(head, ul);
+      viewBox.appendChild(group);
     });
-    group.append(head, ul);
-    expView.appendChild(group);
-  });
-}
-
-function renderMonthly() {
-  expView.innerHTML = "";
-  if (!expenses.length) {
-    expView.appendChild(el("p", "empty", "Belum ada pengeluaran. Tambahkan lewat formulir di atas."));
-    return;
   }
-  const byMonth = {};
-  expenses.forEach(x => {
-    const ym = x.date.slice(0, 7);
-    byMonth[ym] = byMonth[ym] || { total: 0, count: 0 };
-    byMonth[ym].total += x.amount; byMonth[ym].count++;
+
+  // ----- tampilan bulanan -----
+  function renderMonthly() {
+    viewBox.innerHTML = "";
+    if (!data().length) {
+      viewBox.appendChild(el("p", "empty", "Belum ada data. Tambahkan lewat formulir di atas."));
+      return;
+    }
+    const byMonth = {};
+    data().forEach(x => {
+      const ym = x.date.slice(0, 7);
+      byMonth[ym] = byMonth[ym] || { total: 0, count: 0 };
+      byMonth[ym].total += x.amount; byMonth[ym].count++;
+    });
+    const keys = Object.keys(byMonth).sort().reverse();
+    const max = Math.max(...keys.map(m => byMonth[m].total));
+    keys.forEach(m => {
+      const row = el("div", "month-row");
+      const top = el("div", "top");
+      top.append(el("span", "", fmtMonth(m)), el("span", "", rupiah(byMonth[m].total)));
+      const meter = el("div", "meter"); const bar = el("i");
+      bar.style.width = Math.max(4, (byMonth[m].total / max) * 100) + "%"; meter.appendChild(bar);
+      row.append(top, meter, el("div", "meta", byMonth[m].count + " transaksi"));
+      viewBox.appendChild(row);
+    });
+  }
+
+  function render() {
+    $("monthPick").hidden = view !== "day";
+    $("tabDay").setAttribute("aria-pressed", String(view === "day"));
+    $("tabMonth").setAttribute("aria-pressed", String(view === "month"));
+    renderStats();
+    view === "day" ? renderDaily() : renderMonthly();
+    syncChips();
+  }
+  function save() { saveJSON(cfg.key, data()); pushCloud(); renderSummary(); }
+
+  $("form").addEventListener("submit", e => {
+    e.preventDefault();
+    const note = noteIn.value.trim();
+    const amount = Number(amountIn.value);
+    if (cfg.target === "note") { if (!note) { noteIn.focus(); return; } }
+    else if (!src && !note) { chipBox.querySelector(".chip")?.focus(); return; }
+    if (!(amount > 0)) { amountIn.focus(); return; }
+    const date = dateIn.value || todayISO();
+    data().push({ id: Date.now() + Math.random(), note, src: cfg.target === "src" ? src : "", amount, date });
+    noteIn.value = ""; amountIn.value = ""; src = "";
+    monthIn.value = date.slice(0, 7); // langsung tampilkan bulan data yang baru ditambah
+    save(); render();
+    (cfg.target === "note" ? noteIn : amountIn).focus();
   });
-  const keys = Object.keys(byMonth).sort().reverse();
-  const max = Math.max(...keys.map(k => byMonth[k].total));
-  keys.forEach(k => {
-    const m = byMonth[k];
-    const row = el("div", "month-row");
-    const top = el("div", "top");
-    top.append(el("span", "", fmtMonth(k)), el("span", "", rupiah(m.total)));
-    const meter = el("div", "meter"); const bar = el("i"); bar.style.width = Math.max(4, (m.total / max) * 100) + "%"; meter.appendChild(bar);
-    row.append(top, meter, el("div", "meta", m.count + " transaksi"));
-    expView.appendChild(row);
-  });
+  $("tabDay").onclick = () => { view = "day"; render(); };
+  $("tabMonth").onclick = () => { view = "month"; render(); };
+  monthIn.onchange = () => { if (!monthIn.value) monthIn.value = todayISO().slice(0, 7); render(); };
+
+  ledgers[type] = { render };
+  render();
 }
 
-function renderExp() {
-  monthPick.hidden = view !== "day";
-  tabDay.setAttribute("aria-pressed", view === "day");
-  tabMonth.setAttribute("aria-pressed", view === "month");
-  renderStats();
-  view === "day" ? renderDaily() : renderMonthly();
+// Ringkasan bulan ini: pemasukan, pengeluaran, tabungan, dan sisa
+function renderSummary() {
+  const ym = todayISO().slice(0, 7);
+  const inc = sumOf(store.income,  x => x.date.startsWith(ym));
+  const exp = sumOf(store.expense, x => x.date.startsWith(ym));
+  const sav = sumOf(store.saving,  x => x.date.startsWith(ym));
+  const left = inc - exp - sav;
+  document.getElementById("summaryLabel").textContent = "Ringkasan " + fmtMonth(ym) + " (sisa = pemasukan − pengeluaran − tabungan)";
+  const box = document.getElementById("summary");
+  box.innerHTML = "";
+  [["Pemasukan", inc, ""], ["Pengeluaran", exp, ""], ["Tabungan", sav, ""],
+   ["Sisa saldo", left, left < 0 ? "neg" : (left > 0 ? "pos" : "")]].forEach(([name, val, cls]) => {
+    const s = el("div", "stat");
+    s.append(el("small", "", name), el("strong", cls, (val < 0 ? "−" : "") + rupiah(Math.abs(val))));
+    box.appendChild(s);
+  });
 }
+function renderAllMoney() { Object.values(ledgers).forEach(l => l.render()); renderSummary(); }
 
-document.getElementById("expForm").addEventListener("submit", e => {
-  e.preventDefault();
-  const note = expNote.value.trim();
-  const amount = Number(expAmount.value);
-  if (!note) { expNote.focus(); return; }
-  if (!(amount > 0)) { expAmount.focus(); return; }
-  const date = expDate.value || todayISO();
-  expenses.push({ id: Date.now() + Math.random(), note, amount, date });
-  expNote.value = ""; expAmount.value = "";
-  expMonth.value = date.slice(0, 7); // langsung tampilkan bulan data yang baru ditambah
-  saveExp(); renderExp();
-  expNote.focus();
-});
-tabDay.onclick = () => { view = "day"; renderExp(); };
-tabMonth.onclick = () => { view = "month"; renderExp(); };
-expMonth.onchange = () => { if (!expMonth.value) expMonth.value = todayISO().slice(0, 7); renderExp(); };
-renderExp();
+Object.entries(LEDGERS).forEach(([type, cfg]) => createLedger(type, cfg));
+renderSummary();
 
 /* ============================================================
    JADWAL HARIAN SENIN – MINGGU
@@ -827,8 +960,21 @@ let currentUser = null;
 function pushCloud() {
   if (!currentUser) return;
   db.collection("users").doc(currentUser.uid)
-    .set({ tasks, expenses, updated: Date.now() })
+    .set({
+      tasks,
+      expenses: store.expense,
+      incomes: store.income,
+      savings: store.saving,
+      updated: Date.now()
+    })
     .catch(err => console.error("Gagal sinkron:", err));
+}
+
+function saveAllLocal() {
+  saveJSON(TASK_KEY, tasks);
+  saveJSON(LEDGERS.expense.key, store.expense);
+  saveJSON(LEDGERS.income.key,  store.income);
+  saveJSON(LEDGERS.saving.key,  store.saving);
 }
 
 auth.onAuthStateChanged(async user => {
@@ -838,9 +984,9 @@ auth.onAuthStateChanged(async user => {
   if (!user) {
     // Bersihkan data lokal supaya tidak bocor ke akun lain di perangkat yang sama
     tasks = DEFAULT_TASKS.map(t => ({ ...t }));
-    expenses = [];
-    saveJSON(TASK_KEY, tasks); saveJSON(EXP_KEY, expenses);
-    renderTasks(); renderExp();
+    store.expense = []; store.income = []; store.saving = [];
+    saveAllLocal();
+    renderTasks(); renderAllMoney();
     return;
   }
 
@@ -849,9 +995,11 @@ auth.onAuthStateChanged(async user => {
     if (snap.exists) {
       const d = snap.data();
       tasks = (d.tasks || []).map(t => ({ text: t.text, done: !!t.done, due: t.due || null }));
-      expenses = d.expenses || [];
-      saveJSON(TASK_KEY, tasks); saveJSON(EXP_KEY, expenses);
-      renderTasks(); renderExp();
+      store.expense = d.expenses || [];
+      store.income  = d.incomes  || [];
+      store.saving  = d.savings  || [];
+      saveAllLocal();
+      renderTasks(); renderAllMoney();
     } else {
       pushCloud(); // login pertama: unggah data yang sudah ada di browser ini
     }
