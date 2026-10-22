@@ -72,7 +72,8 @@ h1{font:900 clamp(2rem,5.2vw,3.6rem)/1.1 Montserrat,sans-serif;letter-spacing:-.
 .photo-wrap::before{content:"";position:absolute;width:24rem;max-width:100%;aspect-ratio:1;border-radius:50%;background:rgba(var(--acc-rgb),.3);filter:blur(60px);z-index:-1;animation:glow 6s ease-in-out infinite}
 @keyframes glow{50%{opacity:.5}}
 .photo{position:relative;width:100%;max-width:420px;padding:.5rem;border-radius:20px;overflow:hidden}
-.photo img{display:block;width:100%;aspect-ratio:4/5;object-fit:cover;object-position:top;border-radius:14px;background:#2a1013}
+.photo img{display:block;width:100%;aspect-ratio:4/5;object-fit:cover;object-position:top;border-radius:14px;background:#2a1013;filter:grayscale(1);transition:filter .6s ease}
+.photo:hover img,.photo.color img{filter:grayscale(0)}
 .photo .cap{position:absolute;left:1.1rem;right:1.1rem;bottom:1.1rem;padding:.8rem 1rem;border-radius:14px;display:flex;justify-content:space-between;align-items:center;gap:.8rem}
 .cap b{font:700 .8rem Montserrat,sans-serif;display:block}
 .cap span{font-size:.7rem;color:var(--acc-text);font-weight:600}
@@ -145,8 +146,27 @@ select.field option{background:#1a0a0c}
 .day-head{display:flex;justify-content:space-between;gap:1rem;font-weight:700;font-size:.88rem;padding-bottom:.35rem;border-bottom:1px solid var(--line);margin-bottom:.3rem}
 .tx{display:flex;align-items:center;gap:.6rem;padding:.4rem 0;font-size:.9rem}
 .tx .note{flex:1;min-width:0;word-break:break-word}
+.tx .note small{display:block;color:var(--muted);font-size:.72rem}
 .tx .amt{font-weight:700;font-variant-numeric:tabular-nums}
 .hint{font-size:.75rem;color:var(--muted);margin-top:.8rem}
+.chips{flex:1 0 100%;display:flex;flex-wrap:wrap;gap:.4rem}
+.chip{border:1px solid var(--line);background:rgba(255,255,255,.06);color:#d0c8c9;font-size:.76rem;font-weight:600;padding:.3rem .8rem;border-radius:999px;cursor:pointer;transition:background .2s,border-color .2s}
+.chip:hover{background:rgba(var(--acc-rgb),.25);border-color:var(--acc-text);color:#fff}
+.charts{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:.8rem;margin-bottom:1.2rem}
+.charts .full{grid-column:1/-1}
+.box h5{font:700 .85rem Montserrat,sans-serif;margin-bottom:.7rem}
+.chart-svg{width:100%;height:auto;display:block}
+.chart-svg text{fill:#a9a0a1;font-size:10px;font-family:Inter,sans-serif}
+.legend{display:grid;gap:.3rem;font-size:.78rem;margin-top:.6rem}
+.legend div{display:flex;align-items:center;gap:.5rem}
+.legend i{width:10px;height:10px;border-radius:3px;flex-shrink:0}
+.legend span:nth-child(2){flex:1}
+.legend b{font-variant-numeric:tabular-nums;font-weight:600}
+.donut-wrap{display:flex;justify-content:center}
+.donut-wrap svg{width:150px;height:150px}
+.donut-wrap text{fill:#fff;font:700 11px Montserrat,sans-serif}
+.key{display:flex;gap:1rem;font-size:.74rem;color:var(--muted);margin-bottom:.4rem}
+.key i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:.35rem}
 
 /* PORTOFOLIO */
 .port{display:flex;align-items:center;gap:1.2rem;padding:1.3rem;transition:transform .2s}
@@ -247,7 +267,7 @@ body.in .gate{display:none}
       </div>
     </div>
     <div class="photo-wrap">
-      <div class="photo glass">
+      <div class="photo glass" id="photo">
         <img src="profillennn.jpeg" alt="Foto Adyatama Prawisa Viollentino">
         <div class="cap glass">
           <div><b>Adyatama Prawisa V.</b><span>Mahasiswa &amp; pendaki gunung</span></div>
@@ -323,12 +343,17 @@ body.in .gate{display:none}
         <option value="sout">Pengeluaran dari tabungan</option>
       </select>
     </label>
+    <label class="fl sm"><span id="lblSrc">Dibayar dengan</span>
+      <select class="field" id="expSrc"></select>
+    </label>
+    <div class="chips" id="chips" aria-label="Shortcut keterangan"></div>
     <label class="fl grow">Keterangan<input class="field" type="text" id="expNote" placeholder="Contoh: makan siang" maxlength="80" autocomplete="off"></label>
     <label class="fl sm">Nominal (Rp)<input class="field" type="number" id="expAmount" placeholder="15000" min="1" step="1" inputmode="numeric"></label>
     <label class="fl sm">Tanggal<input class="field" type="date" id="expDate"></label>
     <button class="submit" type="submit">Tambah</button>
   </form>
   <div class="row-top"><label class="fl" style="max-width:200px">Lihat bulan<input class="field" type="month" id="expMonth"></label></div>
+  <div class="charts" id="charts"></div>
   <div id="expView"></div>
   <p class="hint">Saldo kas = pemasukan − pengeluaran − setoran tabungan (semua waktu). Saldo tabungan = setoran − pengeluaran dari tabungan. Pengeluaran dari tabungan tidak mengurangi saldo kas.</p>
 </div></div>
@@ -396,6 +421,13 @@ function el(tag, cls, text){ const e = document.createElement(tag); if (cls) e.c
 let toastTimer;
 function toast(msg){ const t = $("toast"); t.textContent = msg; t.classList.add("show"); clearTimeout(toastTimer); toastTimer = setTimeout(() => t.classList.remove("show"), 2600); }
 
+/* ============ FOTO: abu-abu, berwarna saat disentuh mouse ============ */
+(function(){
+  const p = $("photo"); let t;
+  p.addEventListener("touchstart", () => { clearTimeout(t); p.classList.add("color"); }, {passive:true});
+  p.addEventListener("touchend", () => { t = setTimeout(() => p.classList.remove("color"), 1500); }, {passive:true});
+})();
+
 /* ============ MODAL & NAV ============ */
 let lastFocus = null;
 function openModal(id){
@@ -459,8 +491,8 @@ const DEFAULT_TASKS = [
 ];
 const TASK_KEY = "todo-profil-v1", EXP_KEY = "pengeluaran-profil-v1", CLS_KEY = "jadwal-kuliah-v1";
 const normTasks = a => (a || []).map(t => ({text:t.text, done:!!t.done, due:t.due || null}));
-// Data lama (tanpa "type") otomatis dianggap pengeluaran
-const normExp = a => (a || []).map(x => ({...x, type: x.type || "out"}));
+// Data lama (tanpa "type") otomatis dianggap pengeluaran; tanpa "src" = tanpa sumber
+const normExp = a => (a || []).map(x => ({...x, type: x.type || "out", src: x.src || ""}));
 let tasks = normTasks(loadJSON(TASK_KEY, DEFAULT_TASKS));
 let expenses = normExp(loadJSON(EXP_KEY, []));
 let classes = loadJSON(CLS_KEY, []);
@@ -523,9 +555,107 @@ const TYPES = {
   save: {label:"Setor tabungan", pill:"save", sign:"→"},
   sout: {label:"Dari tabungan", pill:"sout", sign:"−"}
 };
-const expNote = $("expNote"), expAmount = $("expAmount"), expDate = $("expDate"), expMonth = $("expMonth"), expType = $("expType");
+// Shortcut keterangan per jenis
+const SHORTCUTS = {
+  in:   ["Uang Mingguan","Uang Bulanan","Uang Saku","Gaji","Freelance","Beasiswa","Hadiah","Jual Barang","Lainnya"],
+  out:  ["Transportasi","Jajan","Makan","Kopi","Kuota/Pulsa","Bensin","Tugas Kuliah","Top Up Game","Belanja","Hiburan","Lainnya"],
+  save: ["Tabungan Mingguan","Tabungan Bulanan","Dana Darurat","Tabungan Mendaki","Tabungan Laptop","Lainnya"],
+  sout: ["Kebutuhan Mendadak","Biaya Kuliah","Biaya Mendaki","Beli Barang","Lainnya"]
+};
+// Sumber dana per jenis
+const WALLETS = ["Dana","GoPay","ShopeePay","SeaBank","OVO","Rekening Bank","Tunai"];
+const SOURCES = {
+  in:   {label:"Sumber pemasukan",   opts:[...WALLETS,"Orang Tua","Lainnya"]},
+  out:  {label:"Dibayar dengan",     opts:[...WALLETS,"Lainnya"]},
+  save: {label:"Sumber setoran",     opts:[...WALLETS,"Lainnya"]},
+  sout: {label:"Diambil dari tabungan", opts:["SeaBank","Rekening Bank","Celengan/Tunai","Dana","Lainnya"]}
+};
+const PAL = ["#e50914","#6fb1ff","#5fd38d","#f0c36a","#a78bfa","#ff9f43","#2dd4bf","#f472b6","#94a3b8","#84cc16","#38bdf8","#fb7185"];
+const expNote = $("expNote"), expAmount = $("expAmount"), expDate = $("expDate"), expMonth = $("expMonth"), expType = $("expType"), expSrc = $("expSrc");
 expDate.value = todayISO(); expMonth.value = todayISO().slice(0, 7);
 const sum = pred => expenses.filter(pred).reduce((s, x) => s + x.amount, 0);
+
+function fillTypeOptions(){
+  const t = expType.value;
+  $("lblSrc").textContent = SOURCES[t].label;
+  expSrc.innerHTML = "";
+  SOURCES[t].opts.forEach(o => { const op = el("option", "", o); op.value = o; expSrc.appendChild(op); });
+  const chips = $("chips"); chips.innerHTML = "";
+  SHORTCUTS[t].forEach(s => {
+    const b = el("button", "chip", s); b.type = "button";
+    b.onclick = () => { expNote.value = s === "Lainnya" ? "" : s; expNote.focus(); };
+    chips.appendChild(b);
+  });
+  expNote.placeholder = "Contoh: " + (SHORTCUTS[t][0] || "");
+}
+expType.onchange = fillTypeOptions;
+fillTypeOptions();
+
+// Kategori diambil dari awalan keterangan yang cocok dengan shortcut
+function catOf(x){
+  const n = (x.note || "").toLowerCase();
+  const hit = (SHORTCUTS[x.type] || []).find(s => s !== "Lainnya" && n.startsWith(s.toLowerCase()));
+  return hit || "Lainnya";
+}
+function groupSum(items, keyFn){
+  const m = {};
+  items.forEach(x => { const k = keyFn(x); m[k] = (m[k] || 0) + x.amount; });
+  return Object.entries(m).map(([label, val]) => ({label, val})).sort((a, b) => b.val - a.val);
+}
+const short = n => n >= 1e6 ? (n/1e6).toFixed(n % 1e6 ? 1 : 0) + "jt" : n >= 1e3 ? Math.round(n/1e3) + "rb" : String(Math.round(n));
+
+function donutBox(title, data){
+  const box = el("div", "box"); box.appendChild(el("h5", "", title));
+  if (!data.length) { box.appendChild(el("p", "empty", "Belum ada data.")); return box; }
+  const total = data.reduce((s, d) => s + d.val, 0), R = 52, C = 2 * Math.PI * R;
+  let off = 0, arcs = "";
+  data.forEach((d, i) => {
+    const len = d.val / total * C;
+    arcs += `<circle cx="70" cy="70" r="${R}" fill="none" stroke="${PAL[i % PAL.length]}" stroke-width="22" stroke-dasharray="${len} ${C - len}" stroke-dashoffset="${-off}" transform="rotate(-90 70 70)"/>`;
+    off += len;
+  });
+  const w = el("div", "donut-wrap");
+  w.innerHTML = `<svg viewBox="0 0 140 140" role="img" aria-label="${title}">${arcs}<text x="70" y="74" text-anchor="middle">${short(total)}</text></svg>`;
+  const lg = el("div", "legend");
+  data.forEach((d, i) => {
+    const row = el("div"), sw = el("i");
+    sw.style.background = PAL[i % PAL.length];
+    row.append(sw, el("span", "", d.label), el("b", "", Math.round(d.val / total * 100) + "% · " + rupiah(d.val)));
+    lg.appendChild(row);
+  });
+  box.append(w, lg);
+  return box;
+}
+function barsBox(ym, month){
+  const box = el("div", "box full"); box.appendChild(el("h5", "", "Arus kas harian — " + fmtMonth(ym)));
+  const days = new Date(+ym.slice(0,4), +ym.slice(5,7), 0).getDate();
+  const inc = Array(days + 1).fill(0), exp = Array(days + 1).fill(0);
+  month.forEach(x => { const d = +x.date.slice(8, 10); if (x.type === "in") inc[d] += x.amount; else if (x.type === "out" || x.type === "sout") exp[d] += x.amount; });
+  const max = Math.max(1, ...inc, ...exp), W = 600, H = 170, base = 140, top = 14, slot = W / days;
+  let s = `<line x1="0" y1="${base}" x2="${W}" y2="${base}" stroke="rgba(255,255,255,.2)"/>`;
+  s += `<text x="0" y="${top - 3}">${short(max)}</text>`;
+  for (let d = 1; d <= days; d++) {
+    const x = (d - 1) * slot, bw = Math.max(2, slot * .36);
+    const hi = inc[d] / max * (base - top), he = exp[d] / max * (base - top);
+    if (inc[d]) s += `<rect x="${x + slot * .1}" y="${base - hi}" width="${bw}" height="${hi}" rx="2" fill="#5fd38d"><title>Tgl ${d}: pemasukan ${rupiah(inc[d])}</title></rect>`;
+    if (exp[d]) s += `<rect x="${x + slot * .1 + bw + 1}" y="${base - he}" width="${bw}" height="${he}" rx="2" fill="#ff6b72"><title>Tgl ${d}: pengeluaran ${rupiah(exp[d])}</title></rect>`;
+    if (d === 1 || d % 5 === 0) s += `<text x="${x + slot / 2}" y="${base + 14}" text-anchor="middle">${d}</text>`;
+  }
+  const key = el("div", "key"); key.innerHTML = '<span><i style="background:#5fd38d"></i>Pemasukan</span><span><i style="background:#ff6b72"></i>Pengeluaran</span>';
+  const w = el("div"); w.style.overflowX = "auto";
+  w.innerHTML = `<svg class="chart-svg" viewBox="0 0 ${W} ${H}" style="min-width:420px" role="img" aria-label="Grafik batang pemasukan dan pengeluaran harian">${s}</svg>`;
+  box.append(key, w);
+  return box;
+}
+function renderCharts(ym, month){
+  const c = $("charts"); c.innerHTML = "";
+  if (!month.length) return;
+  c.appendChild(barsBox(ym, month));
+  const spend = month.filter(x => x.type === "out" || x.type === "sout");
+  c.appendChild(donutBox("Pengeluaran per kategori", groupSum(spend, catOf)));
+  c.appendChild(donutBox("Pengeluaran per sumber", groupSum(spend, x => x.src || "Tanpa sumber")));
+  c.appendChild(donutBox("Pemasukan per sumber", groupSum(month.filter(x => x.type === "in"), x => x.src || "Tanpa sumber")));
+}
 
 function renderExp(){
   const ym = expMonth.value || todayISO().slice(0, 7);
@@ -540,6 +670,7 @@ function renderExp(){
 
   const view = $("expView"); view.innerHTML = "";
   const month = expenses.filter(x => x.date.startsWith(ym));
+  renderCharts(ym, month);
   if (!month.length) { view.appendChild(el("p", "empty", "Belum ada catatan di " + fmtMonth(ym) + ". Tambahkan lewat formulir di atas.")); return; }
   const byDate = {};
   month.forEach(x => (byDate[x.date] = byDate[x.date] || []).push(x));
@@ -553,7 +684,9 @@ function renderExp(){
       const row = el("div", "tx");
       const del = el("button", "del", "×"); del.type = "button"; del.setAttribute("aria-label", "Hapus catatan");
       del.onclick = () => { expenses = expenses.filter(e => e.id !== x.id); saveExp(); renderExp(); };
-      row.append(el("span", "pill " + T.pill, T.label), el("span", "note", x.note), el("span", "amt", T.sign + rupiah(x.amount).replace("Rp", "Rp")), del);
+      const note = el("span", "note", x.note);
+      if (x.src) note.appendChild(el("small", "", (SOURCES[x.type] ? SOURCES[x.type].label : "Sumber") + ": " + x.src));
+      row.append(el("span", "pill " + T.pill, T.label), note, el("span", "amt", T.sign + rupiah(x.amount)), del);
       g.appendChild(row);
     });
     view.appendChild(g);
@@ -565,7 +698,7 @@ $("expForm").addEventListener("submit", e => {
   if (!note) { expNote.focus(); return; }
   if (!(amount > 0)) { expAmount.focus(); return; }
   const date = expDate.value || todayISO();
-  expenses.push({id:Date.now() + Math.random(), type:expType.value, note, amount, date});
+  expenses.push({id:Date.now() + Math.random(), type:expType.value, src:expSrc.value, note, amount, date});
   expNote.value = ""; expAmount.value = "";
   expMonth.value = date.slice(0, 7);
   saveExp(); renderExp(); toast("Catatan ditambahkan"); expNote.focus();
