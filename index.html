@@ -62,19 +62,20 @@ button,input,select{font:inherit;color:inherit}
 main{position:relative;width:100%;height:max(560px,calc(100vh - 90px));overflow:hidden}
 main::after{content:"";position:absolute;left:0;right:0;bottom:0;height:32%;z-index:3;pointer-events:none;background:linear-gradient(transparent,rgba(0,0,0,.92))}
 .name{position:absolute;z-index:1;left:0;right:0;top:40%;transform:translateY(-50%);text-align:center;pointer-events:none;user-select:none;
-  font-family:Montserrat,sans-serif;font-weight:900;text-transform:uppercase;line-height:.95;letter-spacing:-.01em}
+  font-family:Montserrat,sans-serif;font-weight:800;text-transform:uppercase;line-height:.95;letter-spacing:.005em;
+  filter:drop-shadow(0 0 22px rgba(var(--acc-rgb),.7))}
 .name span{display:table;margin:0 auto;white-space:nowrap;
   -webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent;
-  filter:drop-shadow(0 0 24px rgba(var(--acc-rgb),.6));
-  -webkit-mask-image:linear-gradient(100deg,#000 0%,#000 40%,transparent 50%,#000 60%,#000 100%);
-  mask-image:linear-gradient(100deg,#000 0%,#000 40%,transparent 50%,#000 60%,#000 100%);
-  -webkit-mask-size:300% 100%;mask-size:300% 100%;-webkit-mask-repeat:no-repeat;mask-repeat:no-repeat}
-.name .l1{font-size:6.6vw;background-image:linear-gradient(90deg,#9e0c14 0%,#ff3a44 42%,#f0f0f0 58%,#b5b5b5 100%)}
-.name .l2{font-size:9.6vw;background-image:linear-gradient(90deg,#6e080e 0%,#c4121c 50%,#7a0a10 100%);opacity:.85}
-/* Gradasi bergerak: huruf menghilang saat gradasi lewat */
-@keyframes sweep{from{-webkit-mask-position:0% 0;mask-position:0% 0}to{-webkit-mask-position:100% 0;mask-position:100% 0}}
-body.in .name span{animation:sweep 5s linear infinite}
-body.in .name .l2{animation-delay:-1.6s}
+  -webkit-text-stroke:1.5px rgba(255,255,255,.22);
+  -webkit-mask-image:linear-gradient(100deg,transparent 0%,transparent 20%,#000 32%,#000 68%,transparent 80%,transparent 100%);mask-image:linear-gradient(100deg,transparent 0%,transparent 20%,#000 32%,#000 68%,transparent 80%,transparent 100%);
+  -webkit-mask-size:500% 100%;mask-size:500% 100%;-webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;
+  -webkit-mask-position:0% 0;mask-position:0% 0}
+.name .l1{font-size:6.6vw;background-image:linear-gradient(180deg,rgba(255,255,255,.38) 0%,rgba(255,255,255,0) 45%,rgba(0,0,0,.28) 100%),linear-gradient(90deg,#9e0c14 0%,#ff3a44 42%,#f0f0f0 58%,#b5b5b5 100%)}
+.name .l2{font-size:9.6vw;background-image:linear-gradient(180deg,rgba(255,255,255,.3) 0%,rgba(255,255,255,0) 45%,rgba(0,0,0,.3) 100%),linear-gradient(90deg,#7a0a10 0%,#d0141f 50%,#8a0c12 100%)}
+/* Tulisan HANYA terlihat saat gradasi lewat */
+@keyframes sweep{0%{-webkit-mask-position:0% 0;mask-position:0% 0}70%,100%{-webkit-mask-position:100% 0;mask-position:100% 0}}
+body.in .name span{animation:sweep 6s linear infinite}
+body.in .name .l2{animation-delay:.3s}
 
 .hero-obj{position:absolute;z-index:2;left:0;right:0;margin:0 auto;top:-4vh;height:120vh;width:auto;max-width:none;display:block;
   filter:drop-shadow(0 0 40px rgba(var(--acc-rgb),.35));
@@ -295,7 +296,7 @@ body.in .gate{display:none}
 
   <main id="top">
     <h1 class="name"><span class="l1">Adyatama Prawisa</span><span class="l2">Viollentino</span></h1>
-    <img class="hero-obj" src="viollenn.png" alt="Foto Adyatama Prawisa Viollentino">
+    <img class="hero-obj" src="objek.png" alt="Foto Adyatama Prawisa Viollentino">
     <div class="social">
       <a class="sbtn" data-social="instagram" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><svg><use href="#i-ig"/></svg></a>
       <a class="sbtn" data-social="tiktok" target="_blank" rel="noopener noreferrer" aria-label="TikTok"><svg><use href="#i-tt"/></svg></a>
