@@ -73,7 +73,8 @@ body.in .smoke{opacity:1}
 .smoke i:nth-child(2),.smoke i:nth-child(5){width:58vw;height:58vw}
 .smoke i:nth-child(even){background:radial-gradient(circle,rgba(110,24,30,.4) 0%,rgba(60,10,14,.18) 45%,transparent 70%)}
 #embers{position:absolute;inset:0;width:100%;height:100%;z-index:2;pointer-events:none}
-@media(max-width:700px){.smoke i{width:95vw;height:95vw}.smoke i:nth-child(2),body.in .social{animation:riseUp .9s cubic-bezier(.22,1,.36,1) 1s both}
+@media(max-width:700px){.smoke i{width:95vw;height:95vw}.smoke i:nth-child(2),.smoke i:nth-child(5){width:110vw;height:110vw}}
+body.in .social{animation:riseUp .9s cubic-bezier(.22,1,.36,1) 1s both}
 @media(max-width:700px){.name{top:36%}.hero-obj{height:78vh;top:6vh}}
 
 footer{max-width:1280px;width:100%;margin:auto;border-top:1px solid rgba(255,255,255,.1);padding:1rem 1.25rem 1.4rem;display:flex;justify-content:space-between;align-items:center;gap:.8rem;flex-wrap:wrap;color:#8d8485;font-size:.78rem}
@@ -794,7 +795,6 @@ setTheme(loadJSON("tema-profil", "maroon"), true);
 /* PERCIKAN API (naik dari bawah ke atas) */
 (function(){
   const c = $("embers"), x = c.getContext("2d"), main = document.querySelector("main");
-  if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
   let W = 0, H = 0, ps = [];
   const rgb = () => getComputedStyle(document.documentElement).getPropertyValue("--acc-rgb").trim() || "229,9,20";
   function size(){ W = c.width = main.clientWidth; H = c.height = main.clientHeight; }
