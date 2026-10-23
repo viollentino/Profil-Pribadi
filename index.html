@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Adyatama Prawisa Viollentino — Profil Pribadi</title>
+<title>Viollentino</title>
 <meta name="description" content="Profil pribadi: tentang saya, hobi, tugas, keuangan, portofolio, dan jadwal kuliah.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -51,10 +51,6 @@ button,input,select{font:inherit;color:inherit}
 .btn.red:hover{box-shadow:0 0 35px rgba(var(--acc-rgb),.8);transform:translateY(-2px)}
 .btn.ghost{background:rgba(255,255,255,.08);border:1px solid var(--line)}
 .btn.ghost:hover{background:rgba(255,255,255,.15);transform:translateY(-2px)}
-.btn.ig{background:linear-gradient(45deg,#f09433,#e6683c 25%,#dc2743 50%,#cc2366 75%,#bc1888);box-shadow:0 4px 20px rgba(220,39,67,.4)}
-.btn.tt{background:#111;border:1px solid var(--line);box-shadow:0 4px 20px rgba(0,0,0,.5)}
-.btn.gh{background:#24292f;border:1px solid var(--line);box-shadow:0 4px 20px rgba(0,0,0,.5)}
-.btn:hover.ig,.btn:hover.tt,.btn:hover.gh{transform:translateY(-2px)}
 .burger{display:none;background:none;border:0;cursor:pointer;padding:.4rem;font-size:1.6rem;line-height:1}
 .mobile{display:none;padding:1rem 1.25rem 1.4rem;border-top:1px solid rgba(255,255,255,.12)}
 .mobile.glass{background:transparent;backdrop-filter:none;-webkit-backdrop-filter:none;box-shadow:none;border-width:1px 0 0}
@@ -63,31 +59,40 @@ button,input,select{font:inherit;color:inherit}
 @media(max-width:1100px){.links,.nav .btn.out{display:none}.burger{display:block}}
 
 /* HERO */
-main{flex:1;max-width:1280px;width:100%;margin:auto;padding:3rem 1.25rem 4rem;display:grid;grid-template-columns:7fr 5fr;gap:3rem;align-items:center}
-.hero-copy{display:grid;gap:1.4rem}
-.tag{display:flex;align-items:center;gap:.6rem;font:700 .8rem Montserrat,sans-serif;letter-spacing:.16em;color:var(--acc-text)}
-.tag i{width:10px;height:10px;border-radius:50%;background:var(--acc-text);animation:ping 1.6s ease-out infinite}
-@keyframes ping{0%{box-shadow:0 0 0 0 rgba(var(--acc-rgb),.7)}100%{box-shadow:0 0 0 12px transparent}}
-h1{font:900 clamp(2rem,5.2vw,3.6rem)/1.1 Montserrat,sans-serif;letter-spacing:-.02em}
-.lead{color:#d0c8c9;font-size:1.08rem;max-width:56ch}
-.social{display:flex;flex-wrap:wrap;gap:.9rem;padding-top:.4rem}
-.photo-wrap{position:relative;display:flex;justify-content:center}
-.photo-wrap::before{content:"";position:absolute;width:24rem;max-width:100%;aspect-ratio:1;border-radius:50%;background:rgba(var(--acc-rgb),.3);filter:blur(60px);z-index:-1;animation:glow 6s ease-in-out infinite}
-@keyframes glow{50%{opacity:.5}}
-.photo{position:relative;width:100%;max-width:420px;padding:.5rem;border-radius:20px;overflow:hidden}
-@property --sr{syntax:'<length>';inherits:true;initial-value:0px}
-.pimg{position:relative;border-radius:14px;overflow:hidden;background:#2a1013;--px:50%;--py:50%;--sr:0px;transition:--sr .45s ease;touch-action:pan-y}
-.pimg.on{--sr:120px}
-.pimg img{display:block;width:100%;aspect-ratio:4/5;object-fit:cover;object-position:top}
-.pimg .gray{filter:grayscale(1)}
-.pimg .col{position:absolute;inset:0;height:100%;
-  -webkit-mask-image:radial-gradient(circle var(--sr) at var(--px) var(--py),#000 0%,#000 55%,transparent 100%);
-  mask-image:radial-gradient(circle var(--sr) at var(--px) var(--py),#000 0%,#000 55%,transparent 100%)}
-.photo .cap{position:absolute;left:1.1rem;right:1.1rem;bottom:1.1rem;padding:.8rem 1rem;border-radius:14px;display:flex;justify-content:space-between;align-items:center;gap:.8rem}
-.cap b{font:700 .8rem Montserrat,sans-serif;display:block}
-.cap span{font-size:.7rem;color:var(--acc-text);font-weight:600}
-.cap button{border:0;background:var(--acc);border-radius:8px;width:34px;height:34px;cursor:pointer;font-size:1rem}
-@media(max-width:900px){main{grid-template-columns:1fr;gap:2.5rem;padding-top:2rem}}
+main{position:relative;width:100%;height:max(560px,calc(100vh - 90px));overflow:hidden;display:flex;justify-content:center;align-items:flex-end}
+.name{position:absolute;z-index:1;left:0;right:0;top:30%;transform:translateY(-50%);text-align:center;pointer-events:none;user-select:none}
+.name span{display:block;font:900 clamp(2.2rem,9.5vw,8.5rem)/1.02 Montserrat,sans-serif;text-transform:uppercase;letter-spacing:-.01em;
+  background:linear-gradient(100deg,#8e0a12 0%,#ff2a36 22%,rgba(255,60,70,0) 38%,rgba(255,255,255,0) 52%,#f2f2f2 66%,#9a9a9a 80%,#8e0a12 100%);
+  background-size:250% 100%;background-position:0 0;
+  -webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent;
+  filter:drop-shadow(0 0 22px rgba(var(--acc-rgb),.55))}
+.name span+span{opacity:.8}
+@keyframes sweep{from{background-position:0 0}to{background-position:100% 0}}
+body.in .name span{animation:sweep 7s ease-in-out infinite alternate}
+body.in .name span+span{animation-delay:-2.5s}
+
+.hero-obj{position:relative;z-index:2;height:94%;width:auto;max-width:100%;object-fit:contain;object-position:bottom;display:block;
+  filter:drop-shadow(0 0 40px rgba(var(--acc-rgb),.35));
+  -webkit-mask-image:linear-gradient(#000 82%,transparent);mask-image:linear-gradient(#000 82%,transparent)}
+/* Jika fotonya JPG berlatar hitam (bukan PNG transparan), tambahkan: mix-blend-mode:lighten; */
+
+/* Tombol sosial kecil di kiri */
+.social{position:fixed;left:.9rem;top:50%;margin-top:-76px;z-index:30;display:flex;flex-direction:column;gap:.6rem}
+.sbtn{display:grid;place-items:center;width:40px;height:40px;border-radius:12px;background:rgba(20,8,10,.7);border:1px solid var(--line);
+  backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);transition:background .25s,transform .25s}
+.sbtn svg{width:20px;height:20px;fill:#fff}
+.sbtn:hover{background:var(--acc);transform:scale(1.08)}
+
+/* Animasi setelah login */
+@keyframes fromBottom{from{transform:translateY(100%);opacity:0}to{transform:none;opacity:1}}
+@keyframes fromLeft{from{transform:translateX(-90px);opacity:0}to{transform:none;opacity:1}}
+@keyframes fromTop{from{transform:translateY(-140%);opacity:0}to{transform:none;opacity:1}}
+body.in .nav{animation:fromTop .9s cubic-bezier(.22,1,.36,1) .1s both}
+body.in .hero-obj{animation:fromBottom 1.3s cubic-bezier(.22,1,.36,1) .35s both}
+body.in .sbtn{animation:fromLeft .8s cubic-bezier(.22,1,.36,1) 1s both}
+body.in .sbtn:nth-child(2){animation-delay:1.15s}
+body.in .sbtn:nth-child(3){animation-delay:1.3s}
+@media(max-width:700px){.name{top:26%}.hero-obj{height:80%}}
 
 footer{max-width:1280px;width:100%;margin:auto;border-top:1px solid rgba(255,255,255,.1);padding:1rem 1.25rem 1.4rem;display:flex;justify-content:space-between;align-items:center;gap:.8rem;flex-wrap:wrap;color:#8d8485;font-size:.78rem}
 .themes{display:flex;align-items:center;gap:.6rem}
@@ -282,24 +287,12 @@ body.in .gate{display:none}
   </header>
 
   <main id="top">
-    <div class="hero-copy">
-      <div class="tag"><i></i>MAHASISWA • GAMER • CLIMBER</div>
-      <h1>Adyatama Prawisa Viollentino</h1>
-      <p class="lead">Welcome!Di web ini kamu bisa tahu banyak hal soal keseharianku—mulai dari, hobi, jadwal nugas, sampai caraku survive ngatur keuangan mahasiswa.</p>
-      <div class="social">
-        <a class="btn ig" data-social="instagram" target="_blank" rel="noopener noreferrer"><svg><use href="#i-ig"/></svg>INSTAGRAM</a>
-        <a class="btn tt" data-social="tiktok" target="_blank" rel="noopener noreferrer"><svg><use href="#i-tt"/></svg>TIKTOK</a>
-        <a class="btn gh" data-social="github" target="_blank" rel="noopener noreferrer"><svg><use href="#i-gh"/></svg>GITHUB</a>
-      </div>
-    </div>
-    <div class="photo-wrap">
-      <div class="photo glass" id="photo">
-        <div class="pimg" id="pimg"><img class="gray" src="profillennn.jpeg" alt="Foto Adyatama Prawisa Viollentino"><img class="col" src="profillennn.jpeg" alt="" aria-hidden="true"></div>
-        <div class="cap glass">
-          <div><b>Adyatama Prawisa V.</b><span>Mahasiswa &amp; pendaki gunung</span></div>
-          <button type="button" data-open="m-about" aria-label="Tentang saya">👤</button>
-        </div>
-      </div>
+    <h1 class="name"><span>Adyatama Prawisa</span><span>Viollentino</span></h1>
+    <img class="hero-obj" src="viollenn.png" alt="Foto Adyatama Prawisa Viollentino">
+    <div class="social">
+      <a class="sbtn" data-social="instagram" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><svg><use href="#i-ig"/></svg></a>
+      <a class="sbtn" data-social="tiktok" target="_blank" rel="noopener noreferrer" aria-label="TikTok"><svg><use href="#i-tt"/></svg></a>
+      <a class="sbtn" data-social="github" target="_blank" rel="noopener noreferrer" aria-label="GitHub"><svg><use href="#i-gh"/></svg></a>
     </div>
   </main>
 
@@ -454,22 +447,6 @@ function saveJSON(k, v){ try { localStorage.setItem(k, JSON.stringify(v)); } cat
 function el(tag, cls, text){ const e = document.createElement(tag); if (cls) e.className = cls; if (text !== undefined) e.textContent = text; return e; }
 let toastTimer;
 function toast(msg){ const t = $("toast"); t.textContent = msg; t.classList.add("show"); clearTimeout(toastTimer); toastTimer = setTimeout(() => t.classList.remove("show"), 2600); }
-
-/* ============ FOTO: abu-abu, berwarna hanya di area spotlight mouse ============ */
-(function(){
-  const box = $("photo"), im = $("pimg");
-  const move = e => {
-    const r = im.getBoundingClientRect();
-    im.style.setProperty("--px", (e.clientX - r.left) + "px");
-    im.style.setProperty("--py", (e.clientY - r.top) + "px");
-    im.classList.add("on");
-  };
-  box.addEventListener("pointerenter", move);
-  box.addEventListener("pointermove", move);
-  box.addEventListener("pointerdown", move);
-  ["pointerleave","pointercancel"].forEach(ev => box.addEventListener(ev, () => im.classList.remove("on")));
-  box.addEventListener("pointerup", e => { if (e.pointerType !== "mouse") setTimeout(() => im.classList.remove("on"), 1200); });
-})();
 
 /* ============ MODAL & NAV ============ */
 document.querySelectorAll(".panel").forEach(p => {
