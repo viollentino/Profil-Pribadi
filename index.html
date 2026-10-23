@@ -158,7 +158,18 @@ select.field option{background:#1a0a0c}
 .chips{flex:1 0 100%;display:flex;flex-wrap:wrap;gap:.4rem}
 .chip{border:1px solid var(--line);background:rgba(255,255,255,.06);color:#d0c8c9;font-size:.76rem;font-weight:600;padding:.3rem .8rem;border-radius:999px;cursor:pointer;transition:background .2s,border-color .2s}
 .chip:hover{background:rgba(var(--acc-rgb),.25);border-color:var(--acc-text);color:#fff}
-.charts{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:.8rem;margin-bottom:1.2rem}
+.charts{display:grid;grid-template-columns:repeat(2,1fr);gap:.8rem;margin-bottom:1.2rem}
+@media(max-width:640px){.charts{grid-template-columns:1fr}}
+.extra{flex:1 0 100%;display:flex;flex-wrap:wrap;gap:.6rem;align-items:flex-end;padding:.8rem;border-radius:12px;background:rgba(var(--acc-rgb),.08);border:1px dashed rgba(var(--acc-rgb),.45)}
+.extra[hidden]{display:none}
+.extra .chips{margin-top:.1rem}
+.goal{padding:.7rem 0;border-bottom:1px solid var(--line)}
+.goal:last-child{border-bottom:0}
+.goal-head{display:flex;justify-content:space-between;gap:.8rem;flex-wrap:wrap;font-size:.88rem;font-weight:700;margin-bottom:.4rem}
+.goal-head span:last-child{font-variant-numeric:tabular-nums;color:var(--info)}
+.gbar{height:9px;border-radius:99px;background:rgba(255,255,255,.1);overflow:hidden}
+.gbar i{display:block;height:100%;border-radius:99px;background:linear-gradient(90deg,var(--acc),var(--info))}
+.goal small{display:block;margin-top:.35rem;color:var(--muted);font-size:.74rem}
 .charts .full{grid-column:1/-1}
 .box h5{font:700 .85rem Montserrat,sans-serif;margin-bottom:.7rem}
 .chart-svg{width:100%;height:auto;display:block}
@@ -355,6 +366,12 @@ body.in .gate{display:none}
       <select class="field" id="expSrc"></select>
     </label>
     <div class="chips" id="chips" aria-label="Shortcut keterangan"></div>
+    <div class="extra" id="saveExtra" hidden>
+      <label class="fl grow"><span id="lblGoal">Tujuan menabung</span><input class="field" type="text" id="expGoal" placeholder="Contoh: Dana Darurat" maxlength="40" autocomplete="off"></label>
+      <label class="fl sm" id="wrapPlace">Disimpan di<select class="field" id="expPlace"></select></label>
+      <label class="fl sm" id="wrapTarget">Target tabungan (Rp)<input class="field" type="number" id="expTarget" placeholder="5000000" min="0" step="1" inputmode="numeric"></label>
+      <div class="chips" id="goalChips" aria-label="Shortcut tujuan menabung"></div>
+    </div>
     <label class="fl grow">Keterangan<input class="field" type="text" id="expNote" placeholder="Contoh: makan siang" maxlength="80" autocomplete="off"></label>
     <label class="fl sm">Nominal (Rp)<input class="field" type="number" id="expAmount" placeholder="15000" min="1" step="1" inputmode="numeric"></label>
     <label class="fl sm">Tanggal<input class="field" type="date" id="expDate"></label>
@@ -363,7 +380,7 @@ body.in .gate{display:none}
   <div class="row-top"><label class="fl" style="max-width:200px">Lihat bulan<input class="field" type="month" id="expMonth"></label></div>
   <div class="charts" id="charts"></div>
   <div id="expView"></div>
-  <p class="hint">Saldo kas = pemasukan − pengeluaran − setoran tabungan (semua waktu). Saldo tabungan = setoran − pengeluaran dari tabungan. Pengeluaran dari tabungan tidak mengurangi saldo kas.</p>
+  <p class="hint">Saldo kas = pemasukan − pengeluaran − setoran tabungan (semua waktu). Saldo tabungan = setoran − pengeluaran dari tabungan. Pengeluaran dari tabungan tidak mengurangi saldo kas. Target tabungan per tujuan diambil dari isian target terbaru pada tujuan tersebut.</p>
 </div></div>
 
 <!-- MODAL: PORTOFOLIO -->
@@ -510,7 +527,7 @@ const DEFAULT_TASKS = [
 const TASK_KEY = "todo-profil-v1", EXP_KEY = "pengeluaran-profil-v1", CLS_KEY = "jadwal-kuliah-v1";
 const normTasks = a => (a || []).map(t => ({text:t.text, done:!!t.done, due:t.due || null}));
 // Data lama (tanpa "type") otomatis dianggap pengeluaran; tanpa "src" = tanpa sumber
-const normExp = a => (a || []).map(x => ({...x, type: x.type || "out", src: x.src || ""}));
+const normExp = a => (a || []).map(x => ({...x, type: x.type || "out", src: x.src || "", goal: x.goal || "", place: x.place || "", target: Number(x.target) || 0}));
 let tasks = normTasks(loadJSON(TASK_KEY, DEFAULT_TASKS));
 let expenses = normExp(loadJSON(EXP_KEY, []));
 let classes = loadJSON(CLS_KEY, []);
@@ -588,6 +605,9 @@ const SOURCES = {
   save: {label:"Sumber setoran",     opts:[...WALLETS,"Lainnya"]},
   sout: {label:"Diambil dari tabungan", opts:["SeaBank","Rekening Bank","Celengan/Tunai","Dana","Lainnya"]}
 };
+// Shortcut tujuan menabung & tempat menyimpan
+const GOALS  = ["Dana Darurat","Event ML","Laptop","HP/Gadget","Mendaki","Liburan","Biaya Kuliah","Top Up Game","Lainnya"];
+const PLACES = ["SeaBank","Celengan/Tunai","Rekening Bank","Dana","GoPay","ShopeePay","Emas","Reksadana","Lainnya"];
 const PAL = ["#e50914","#6fb1ff","#5fd38d","#f0c36a","#a78bfa","#ff9f43","#2dd4bf","#f472b6","#94a3b8","#84cc16","#38bdf8","#fb7185"];
 const expNote = $("expNote"), expAmount = $("expAmount"), expDate = $("expDate"), expMonth = $("expMonth"), expType = $("expType"), expSrc = $("expSrc");
 expDate.value = todayISO(); expMonth.value = todayISO().slice(0, 7);
@@ -605,6 +625,20 @@ function fillTypeOptions(){
     chips.appendChild(b);
   });
   expNote.placeholder = "Contoh: " + (SHORTCUTS[t][0] || "");
+
+  // Kolom tambahan khusus tabungan
+  const isSave = t === "save", isSout = t === "sout";
+  $("saveExtra").hidden = !(isSave || isSout);
+  $("wrapPlace").hidden = !isSave; $("wrapTarget").hidden = !isSave;
+  $("lblGoal").textContent = isSave ? "Tujuan menabung" : "Untuk tujuan";
+  const place = $("expPlace"); place.innerHTML = "";
+  PLACES.forEach(o => { const op = el("option", "", o); op.value = o; place.appendChild(op); });
+  const gc = $("goalChips"); gc.innerHTML = "";
+  GOALS.forEach(g => {
+    const b = el("button", "chip", g); b.type = "button";
+    b.onclick = () => { $("expGoal").value = g === "Lainnya" ? "" : g; $("expGoal").focus(); };
+    gc.appendChild(b);
+  });
 }
 expType.onchange = fillTypeOptions;
 fillTypeOptions();
@@ -665,14 +699,48 @@ function barsBox(ym, month){
   box.append(key, w);
   return box;
 }
+function goalData(){
+  const m = new Map();
+  expenses.filter(x => x.type === "save" || x.type === "sout").forEach(x => {
+    const name = (x.goal || "").trim() || "Tanpa tujuan", k = name.toLowerCase();
+    if (!m.has(k)) m.set(k, {label:name, saved:0, target:0, tdate:"", places:new Set()});
+    const g = m.get(k);
+    if (x.type === "save") {
+      g.saved += x.amount; if (x.place) g.places.add(x.place);
+      if (x.target > 0 && x.date >= g.tdate) { g.target = x.target; g.tdate = x.date; }
+    } else g.saved -= x.amount;
+  });
+  return [...m.values()].sort((a, b) => b.saved - a.saved);
+}
+function goalsBox(goals){
+  const box = el("div", "box full"); box.appendChild(el("h5", "", "Progres tujuan tabungan"));
+  goals.forEach(g => {
+    const row = el("div", "goal"), head = el("div", "goal-head");
+    head.append(el("span", "", g.label), el("span", "", rupiah(g.saved) + (g.target ? " / " + rupiah(g.target) : "")));
+    const bar = el("div", "gbar"), fill = el("i");
+    const pct = g.target ? Math.max(0, Math.min(100, g.saved / g.target * 100)) : 0;
+    fill.style.width = pct + "%"; bar.appendChild(fill);
+    const info = [];
+    info.push(g.target ? Math.round(pct) + "% tercapai" + (g.saved < g.target ? " · kurang " + rupiah(g.target - g.saved) : " · target tercapai 🎉") : "Target belum diisi");
+    if (g.places.size) info.push("Disimpan di: " + [...g.places].join(", "));
+    row.append(head, bar, el("small", "", info.join(" · ")));
+    box.appendChild(row);
+  });
+  return box;
+}
 function renderCharts(ym, month){
   const c = $("charts"); c.innerHTML = "";
-  if (!month.length) return;
-  c.appendChild(barsBox(ym, month));
-  const spend = month.filter(x => x.type === "out" || x.type === "sout");
-  c.appendChild(donutBox("Pengeluaran per kategori", groupSum(spend, catOf)));
-  c.appendChild(donutBox("Pengeluaran per sumber", groupSum(spend, x => x.src || "Tanpa sumber")));
-  c.appendChild(donutBox("Pemasukan per sumber", groupSum(month.filter(x => x.type === "in"), x => x.src || "Tanpa sumber")));
+  const goals = goalData();
+  if (!month.length && !goals.length) return;
+  if (month.length) {
+    c.appendChild(barsBox(ym, month));
+    const spend = month.filter(x => x.type === "out" || x.type === "sout");
+    c.appendChild(donutBox("Pengeluaran per kategori", groupSum(spend, catOf)));
+    c.appendChild(donutBox("Pengeluaran per sumber", groupSum(spend, x => x.src || "Tanpa sumber")));
+    c.appendChild(donutBox("Pemasukan per sumber", groupSum(month.filter(x => x.type === "in"), x => x.src || "Tanpa sumber")));
+  }
+  c.appendChild(donutBox("Tabungan per tujuan (semua waktu)", goals.filter(g => g.saved > 0).map(g => ({label:g.label, val:g.saved}))));
+  if (goals.length) c.appendChild(goalsBox(goals));
 }
 
 function renderExp(){
@@ -703,7 +771,12 @@ function renderExp(){
       const del = el("button", "del", "×"); del.type = "button"; del.setAttribute("aria-label", "Hapus catatan");
       del.onclick = () => { expenses = expenses.filter(e => e.id !== x.id); saveExp(); renderExp(); };
       const note = el("span", "note", x.note);
-      if (x.src) note.appendChild(el("small", "", (SOURCES[x.type] ? SOURCES[x.type].label : "Sumber") + ": " + x.src));
+      const meta = [];
+      if (x.src) meta.push((SOURCES[x.type] ? SOURCES[x.type].label : "Sumber") + ": " + x.src);
+      if (x.goal) meta.push((x.type === "sout" ? "Untuk" : "Tujuan") + ": " + x.goal);
+      if (x.place) meta.push("Disimpan di: " + x.place);
+      if (x.target > 0) meta.push("Target: " + rupiah(x.target));
+      if (meta.length) note.appendChild(el("small", "", meta.join(" · ")));
       row.append(el("span", "pill " + T.pill, T.label), note, el("span", "amt", T.sign + rupiah(x.amount)), del);
       g.appendChild(row);
     });
@@ -716,8 +789,12 @@ $("expForm").addEventListener("submit", e => {
   if (!note) { expNote.focus(); return; }
   if (!(amount > 0)) { expAmount.focus(); return; }
   const date = expDate.value || todayISO();
-  expenses.push({id:Date.now() + Math.random(), type:expType.value, src:expSrc.value, note, amount, date});
-  expNote.value = ""; expAmount.value = "";
+  const ty = expType.value, isSave = ty === "save", hasGoal = isSave || ty === "sout";
+  expenses.push({id:Date.now() + Math.random(), type:ty, src:expSrc.value, note, amount, date,
+    goal: hasGoal ? $("expGoal").value.trim() : "",
+    place: isSave ? $("expPlace").value : "",
+    target: isSave ? (Number($("expTarget").value) || 0) : 0});
+  expNote.value = ""; expAmount.value = ""; $("expGoal").value = ""; $("expTarget").value = "";
   expMonth.value = date.slice(0, 7);
   saveExp(); renderExp(); toast("Catatan ditambahkan"); expNote.focus();
 });
