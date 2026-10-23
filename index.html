@@ -281,7 +281,6 @@ body.in .gate{display:none}
 
 .toast{position:fixed;right:1.2rem;bottom:1.2rem;z-index:120;padding:.8rem 1.1rem;border-radius:12px;font-size:.82rem;border:1px solid rgba(var(--acc-rgb),.5);transform:translateY(80px);opacity:0;transition:.3s;pointer-events:none}
 .toast.show{transform:none;opacity:1}
-@media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important;scroll-behavior:auto!important}.modal.open .pscroll>*,.modal.open .ab-left>*,.modal.open .ab-right>*{opacity:1}}
 </style>
 </head>
 <body>
@@ -575,7 +574,7 @@ document.addEventListener("mousemove", e => {
   const size = () => { c.width = innerWidth; c.height = innerHeight; };
   addEventListener("resize", size); size();
   const ps = Array.from({length:35}, () => ({x:Math.random()*c.width, y:Math.random()*c.height, r:Math.random()*2+.5, a:Math.random()*.5+.1, v:-(Math.random()*.4+.1)}));
-  const still = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const still = false;
   (function loop(){
     x.clearRect(0, 0, c.width, c.height);
     ps.forEach(p => {
