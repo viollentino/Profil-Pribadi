@@ -3,11 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Adyatama Prawisa Viollentino — Profil Pribadi</title>
+<title>Viollen</title>
 <meta name="description" content="Profil pribadi: tentang saya, hobi, tugas, keuangan, portofolio, dan jadwal kuliah.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Montserrat:wght@500;600;700;800;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Montserrat:wght@500;600;700;800;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 <style>
 :root{
   --acc:#e50914; --acc-rgb:229,9,20; --acc-text:#ff6b72;
@@ -106,11 +106,11 @@ footer{max-width:1280px;width:100%;margin:auto;border-top:1px solid rgba(255,255
 .themes{display:flex;align-items:center;gap:.6rem}
 .themes button{width:18px;height:18px;border-radius:50%;border:1px solid rgba(255,255,255,.4);cursor:pointer}
 
-/* MODAL */
+/* MODAL — animasi masuk dari ATAS ke BAWAH */
 .modal{position:fixed;inset:0;z-index:60;display:flex;background:#0a0304;
-  visibility:hidden;pointer-events:none;transform:translateY(100%);
-  transition:transform .55s cubic-bezier(.22,1,.36,1),visibility 0s linear .55s}
-.modal.open{visibility:visible;pointer-events:auto;transform:none;transition:transform .55s cubic-bezier(.22,1,.36,1),visibility 0s}
+  visibility:hidden;pointer-events:none;transform:translateY(-100%);
+  transition:transform .6s cubic-bezier(.22,1,.36,1),visibility 0s linear .6s}
+.modal.open{visibility:visible;pointer-events:auto;transform:none;transition:transform .6s cubic-bezier(.22,1,.36,1),visibility 0s}
 .panel,.panel.glass{position:relative;flex:1;width:100%;height:100%;max-width:none;overflow:hidden;border-radius:0;padding:0;border:0;box-shadow:none;
   backdrop-filter:none;-webkit-backdrop-filter:none;
   background:radial-gradient(circle at 75% 0%,rgba(var(--acc-rgb),.18),transparent 55%),radial-gradient(circle at 0% 100%,rgba(var(--acc-rgb),.10),transparent 50%),#0a0304}
@@ -118,6 +118,19 @@ footer{max-width:1280px;width:100%;margin:auto;border-top:1px solid rgba(255,255
 .pscroll>*{max-width:980px;margin-left:auto;margin-right:auto}
 .panel:not(.wide) .pscroll>*{max-width:780px}
 @media(min-width:900px){.pscroll{padding:2.4rem 2rem 3rem}}
+
+/* Isi modal turun satu per satu dari atas ke bawah */
+@keyframes dropIn{from{opacity:0;transform:translateY(-34px)}to{opacity:1;transform:none}}
+.modal.open .pscroll>*,
+.modal.open .ab-left>*,
+.modal.open .ab-right>*{animation:dropIn .7s cubic-bezier(.22,1,.36,1) both}
+.modal.open .pscroll>*:nth-child(1){animation-delay:.25s}
+.modal.open .pscroll>*:nth-child(2){animation-delay:.35s}
+.modal.open .pscroll>*:nth-child(3){animation-delay:.45s}
+.modal.open .pscroll>*:nth-child(4){animation-delay:.55s}
+.modal.open .pscroll>*:nth-child(5){animation-delay:.65s}
+.modal.open .pscroll>*:nth-child(n+6){animation-delay:.75s}
+
 .x{position:absolute;z-index:3;top:1rem;right:1.2rem;width:40px;height:40px;border-radius:12px;border:0;background:rgba(255,255,255,.12);cursor:pointer;font-size:1.3rem}
 .x:hover{background:rgba(255,255,255,.18)}
 .ph{display:flex;align-items:center;gap:.9rem;margin-bottom:1.3rem;padding-right:2.5rem}
@@ -125,13 +138,41 @@ footer{max-width:1280px;width:100%;margin:auto;border-top:1px solid rgba(255,255
 .ph h3{font:700 1.25rem Montserrat,sans-serif}
 .ph p{font-size:.78rem;color:var(--muted)}
 .box{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:14px;padding:1rem}
-.about p{color:#d0c8c9;font-size:.95rem}
-.about p+p{margin-top:.9rem}
 .hobbies{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:.9rem}
 .hobby{text-align:center;padding:1.2rem .8rem}
 .hobby .e{display:grid;place-items:center;width:52px;height:52px;margin:0 auto .6rem;border-radius:16px;font-size:1.6rem;background:rgba(var(--acc-rgb),.22)}
 .hobby h4{font:700 .95rem Montserrat,sans-serif}
 .hobby p{font-size:.8rem;color:var(--muted)}
+
+/* TENTANG SAYA (layout dua kolom) */
+.about-panel .pscroll>*{max-width:1240px}
+.about-panel .pscroll{padding-top:4.5rem;display:flex;align-items:center}
+.about-panel .pscroll>.ab{width:100%}
+.ab{position:relative;display:grid;grid-template-columns:1fr;gap:2.2rem 3rem}
+@media(min-width:980px){.ab{grid-template-columns:minmax(300px,5fr) 7fr;gap:3rem 4rem;align-items:start}}
+.ab-mark{position:absolute;z-index:0;left:-1rem;top:3rem;font:900 clamp(8rem,22vw,20rem)/1 Montserrat,sans-serif;color:rgba(255,255,255,.035);pointer-events:none;user-select:none;white-space:nowrap;overflow:hidden;max-width:100%}
+.ab-left,.ab-right{position:relative;z-index:1}
+.ab-tag{font:700 .85rem 'Space Mono',monospace;letter-spacing:.32em;color:var(--acc-text);margin-bottom:.8rem;text-transform:uppercase}
+.ab-title{font:900 clamp(3rem,8vw,5.6rem)/.92 Montserrat,sans-serif;text-transform:uppercase;letter-spacing:-.01em;margin-bottom:2rem}
+.ab-title span{display:block;color:var(--acc);text-shadow:0 0 30px rgba(var(--acc-rgb),.45)}
+.ab-info{display:grid;gap:1rem;margin-bottom:2rem}
+.ab-item{border-left:2px solid rgba(255,255,255,.14);padding-left:1.1rem}
+.ab-item small{display:block;font-size:.78rem;letter-spacing:.08em;color:var(--muted);text-transform:uppercase}
+.ab-item strong{display:block;font:800 1.2rem Montserrat,sans-serif;text-transform:uppercase;letter-spacing:.01em}
+.ab-dl{display:inline-flex;align-items:center;gap:.8rem;padding:1rem 1.6rem;border-radius:16px;background:#0b0506;border:2px solid var(--acc);
+  font:800 .85rem Montserrat,sans-serif;letter-spacing:.04em;text-transform:uppercase;box-shadow:0 0 22px rgba(var(--acc-rgb),.35);transition:transform .25s,box-shadow .25s}
+.ab-dl:hover{transform:translateY(-3px);box-shadow:0 0 34px rgba(var(--acc-rgb),.7)}
+.ab-dl svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
+.ab-right p{font-size:clamp(1.05rem,1.7vw,1.5rem);line-height:1.6;color:#e8e1e2}
+.ab-right p+p{margin-top:1.3rem}
+.hl{color:var(--acc-text);background:rgba(var(--acc-rgb),.16);padding:.02em .3em;border-radius:6px}
+.stack{margin-top:2rem;padding:1.5rem 1.6rem;border-radius:28px;background:rgba(10,5,6,.7);border:1px solid rgba(var(--acc-rgb),.35);box-shadow:0 0 30px rgba(var(--acc-rgb),.12) inset}
+.stack h5{font:800 .85rem Montserrat,sans-serif;letter-spacing:.12em;text-transform:uppercase;color:#bdb4b5;margin-bottom:1.1rem}
+.tech{display:flex;flex-wrap:wrap;gap:.8rem}
+.tech span{display:grid;place-items:center;width:52px;height:52px;border-radius:16px;font:800 .78rem Montserrat,sans-serif;letter-spacing:.02em;
+  color:var(--acc-text);background:rgba(var(--acc-rgb),.14);border:1px solid rgba(var(--acc-rgb),.35);text-shadow:0 0 12px rgba(var(--acc-rgb),.7);
+  transition:transform .2s,background .2s}
+.tech span:hover{transform:translateY(-4px);background:rgba(var(--acc-rgb),.3)}
 
 /* FORM */
 .form{display:flex;flex-wrap:wrap;gap:.6rem;align-items:flex-end;margin-bottom:1.1rem}
@@ -240,7 +281,7 @@ body.in .gate{display:none}
 
 .toast{position:fixed;right:1.2rem;bottom:1.2rem;z-index:120;padding:.8rem 1.1rem;border-radius:12px;font-size:.82rem;border:1px solid rgba(var(--acc-rgb),.5);transform:translateY(80px);opacity:0;transition:.3s;pointer-events:none}
 .toast.show{transform:none;opacity:1}
-@media(prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
+@media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important;scroll-behavior:auto!important}.modal.open .pscroll>*,.modal.open .ab-left>*,.modal.open .ab-right>*{opacity:1}}
 </style>
 </head>
 <body>
@@ -316,12 +357,38 @@ body.in .gate{display:none}
 </div>
 
 <!-- MODAL: TENTANG -->
-<div class="modal" id="m-about"><div class="panel glass" role="dialog" aria-label="Tentang saya">
+<div class="modal" id="m-about"><div class="panel glass wide about-panel" role="dialog" aria-label="Tentang saya">
   <button class="x" data-close aria-label="Tutup">×</button>
-  <div class="ph"><div class="ico">👤</div><div><h3>Tentang saya</h3><p>Latar belakang dan fokus saat ini</p></div></div>
-  <div class="about">
-    <p>Saya selalu tertarik sama hal baru, terutama perkembangan teknologi yang makin cepat. Selain sibuk sama hal-hal berbau tech, saya punya hobi mendaki gunung. Memang sih, perjalanannya sering bikin napas mau habis, tapi pemandangan di puncaknya selalu sepadan sama perjuangannya. Kalau lagi nyari hiburan yang simpel buat lepas penat, biasanya saya melipir ke Mobile Legends atau main Roblox..</p>
-    <p>Untuk sekarang, fokus utama saya ada di bangku kuliah. Targetnya jelas: lulus 3,5 tahun, syukur-syukur bisa cumlaude kalau enggak ya tetep disyukuri aja :v. Sembari mengejar target itu, saya juga lagi serius memperdalam keahlian coding buat bikin website dari nol..</p>
+  <div class="ab">
+    <div class="ab-mark" aria-hidden="true">VIOLLEN</div>
+    <div class="ab-left">
+      <p class="ab-tag">[ 01 . Profile ]</p>
+      <h2 class="ab-title">About <span>Me</span></h2>
+      <div class="ab-info">
+        <div class="ab-item"><small>Full Name</small><strong>Adyatama Prawisa Viollentino</strong></div>
+        <div class="ab-item"><small>Location</small><strong>Indonesia</strong></div>
+        <div class="ab-item"><small>Specialization</small><strong>Web Developer &amp; Gamer</strong></div>
+        <div class="ab-item"><small>Status</small><strong>Mahasiswa / Developer</strong></div>
+      </div>
+      <a class="ab-dl" href="cv.pdf" download>Download CV
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12m0 0l-5-5m5 5l5-5M4 20h16"/></svg>
+      </a>
+    </div>
+    <div class="ab-right">
+      <p>Saya selalu tertarik sama hal baru, terutama <span class="hl">perkembangan teknologi</span> yang makin cepat. Selain sibuk sama hal-hal berbau tech, saya punya hobi <span class="hl">mendaki gunung</span>. Memang sih, perjalanannya sering bikin napas mau habis, tapi pemandangan di puncaknya selalu sepadan sama perjuangannya. Kalau lagi nyari hiburan yang simpel buat lepas penat, biasanya saya melipir ke <span class="hl">Mobile Legends</span> atau main <span class="hl">Roblox</span>.</p>
+      <p>Untuk sekarang, fokus utama saya ada di <span class="hl">bangku kuliah.</span> Targetnya jelas: lulus 3,5 tahun, syukur-syukur bisa cumlaude kalau enggak ya tetep disyukuri aja :v. Sembari mengejar target itu, saya juga lagi serius memperdalam keahlian <span class="hl">coding</span> buat bikin website dari nol.</p>
+      <div class="stack">
+        <h5>Software Engineer</h5>
+        <div class="tech" aria-label="Teknologi yang saya gunakan">
+          <span title="HTML5">HTML</span>
+          <span title="CSS3">CSS</span>
+          <span title="JavaScript">JS</span>
+          <span title="Firebase">FB</span>
+          <span title="Git">GIT</span>
+          <span title="GitHub">GH</span>
+        </div>
+      </div>
+    </div>
   </div>
 </div></div>
 
@@ -466,10 +533,12 @@ let lastFocus = null;
 function openModal(id){
   document.querySelectorAll(".modal.open").forEach(m => m.classList.remove("open"));
   lastFocus = document.activeElement;
-  $(id).classList.add("open");
+  const m = $(id);
+  const sc = m.querySelector(".pscroll"); if (sc) sc.scrollTop = 0;
+  m.classList.add("open");
   document.body.style.overflow = "hidden";
   $("mobile").classList.remove("open");
-  const first = $(id).querySelector("input,select,button.x"); if (first) first.focus({preventScroll:true});
+  const first = m.querySelector("input,select,button.x"); if (first) first.focus({preventScroll:true});
 }
 function closeModals(){ document.querySelectorAll(".modal.open").forEach(m => m.classList.remove("open")); document.body.style.overflow = ""; if (lastFocus) lastFocus.focus(); }
 document.querySelectorAll("[data-open]").forEach(b => b.onclick = () => openModal(b.dataset.open));
