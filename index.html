@@ -72,8 +72,14 @@ h1{font:900 clamp(2rem,5.2vw,3.6rem)/1.1 Montserrat,sans-serif;letter-spacing:-.
 .photo-wrap::before{content:"";position:absolute;width:24rem;max-width:100%;aspect-ratio:1;border-radius:50%;background:rgba(var(--acc-rgb),.3);filter:blur(60px);z-index:-1;animation:glow 6s ease-in-out infinite}
 @keyframes glow{50%{opacity:.5}}
 .photo{position:relative;width:100%;max-width:420px;padding:.5rem;border-radius:20px;overflow:hidden}
-.photo img{display:block;width:100%;aspect-ratio:4/5;object-fit:cover;object-position:top;border-radius:14px;background:#2a1013;filter:grayscale(1);transition:filter .6s ease}
-.photo:hover img,.photo.color img{filter:grayscale(0)}
+@property --sr{syntax:'<length>';inherits:true;initial-value:0px}
+.pimg{position:relative;border-radius:14px;overflow:hidden;background:#2a1013;--px:50%;--py:50%;--sr:0px;transition:--sr .45s ease;touch-action:pan-y}
+.pimg.on{--sr:120px}
+.pimg img{display:block;width:100%;aspect-ratio:4/5;object-fit:cover;object-position:top}
+.pimg .gray{filter:grayscale(1)}
+.pimg .col{position:absolute;inset:0;height:100%;
+  -webkit-mask-image:radial-gradient(circle var(--sr) at var(--px) var(--py),#000 0%,#000 55%,transparent 100%);
+  mask-image:radial-gradient(circle var(--sr) at var(--px) var(--py),#000 0%,#000 55%,transparent 100%)}
 .photo .cap{position:absolute;left:1.1rem;right:1.1rem;bottom:1.1rem;padding:.8rem 1rem;border-radius:14px;display:flex;justify-content:space-between;align-items:center;gap:.8rem}
 .cap b{font:700 .8rem Montserrat,sans-serif;display:block}
 .cap span{font-size:.7rem;color:var(--acc-text);font-weight:600}
@@ -209,7 +215,7 @@ body.in .gate{display:none}
 <!-- LOGIN -->
 <div class="gate" id="authGate">
   <form class="glass gate-card" id="authForm">
-    <div class="brand"><b><i></i>ADYATAMA PRAWISA</b><small>MAHASISWA • GAMER • CLIMBER</small></div>
+    <div class="brand"><b><i></i>Viollen</b><small>MAHASISWA • GAMER • CLIMBER</small></div>
     <h2>Masuk</h2>
     <p>Login agar tugas, keuangan, dan jadwalmu tersimpan di semua perangkat.</p>
     <label class="fl">Email<input class="field" type="email" id="authEmail" required autocomplete="email"></label>
@@ -232,7 +238,7 @@ body.in .gate{display:none}
 <div class="page">
   <header class="nav">
     <div class="nav-in">
-      <a class="brand" href="#top"><b><i></i>ADYATAMA PRAWISA</b><small>MAHASISWA • GAMER • CLIMBER</small></a>
+      <a class="brand" href="#top"><b><i></i>VIOLLEN</b><small>MAHASISWA • GAMER • CLIMBER</small></a>
       <nav class="links" aria-label="Navigasi utama">
         <button data-open="m-about">TENTANG</button>
         <button data-open="m-hobi">HOBI</button>
@@ -259,7 +265,7 @@ body.in .gate{display:none}
     <div class="hero-copy">
       <div class="tag"><i></i>MAHASISWA • GAMER • CLIMBER</div>
       <h1>Adyatama Prawisa Viollentino</h1>
-      <p class="lead">Halo, selamat datang di halaman pribadiku! Kenali aku lebih dekat lewat cerita, hobi, tugas, keuangan, dan jadwal kuliahku.</p>
+      <p class="lead">Welcome!Di web ini kamu bisa tahu banyak hal soal keseharianku—mulai dari, hobi, jadwal nugas, sampai caraku survive ngatur keuangan mahasiswa.</p>
       <div class="social">
         <a class="btn ig" data-social="instagram" target="_blank" rel="noopener noreferrer"><svg><use href="#i-ig"/></svg>INSTAGRAM</a>
         <a class="btn tt" data-social="tiktok" target="_blank" rel="noopener noreferrer"><svg><use href="#i-tt"/></svg>TIKTOK</a>
@@ -268,7 +274,7 @@ body.in .gate{display:none}
     </div>
     <div class="photo-wrap">
       <div class="photo glass" id="photo">
-        <img src="profillennn.jpeg" alt="Foto Adyatama Prawisa Viollentino">
+        <div class="pimg" id="pimg"><img class="gray" src="profillennn.jpeg" alt="Foto Adyatama Prawisa Viollentino"><img class="col" src="profillennn.jpeg" alt="" aria-hidden="true"></div>
         <div class="cap glass">
           <div><b>Adyatama Prawisa V.</b><span>Mahasiswa &amp; pendaki gunung</span></div>
           <button type="button" data-open="m-about" aria-label="Tentang saya">👤</button>
@@ -283,6 +289,7 @@ body.in .gate{display:none}
       <button style="background:#e50914" data-theme="maroon" title="Maroon" aria-label="Tema maroon"></button>
       <button style="background:#059669" data-theme="emerald" title="Hijau" aria-label="Tema hijau"></button>
       <button style="background:#7c3aed" data-theme="purple" title="Ungu" aria-label="Tema ungu"></button>
+      <button style="background:#2563eb" data-theme="blue" title="Biru" aria-label="Tema biru"></button>
     </div>
   </footer>
 </div>
@@ -307,6 +314,7 @@ body.in .gate{display:none}
     <article class="box hobby"><div class="e">🎥</div><h4>Nonton</h4><p>Anime, movie, dan youtuber.</p></article>
     <article class="box hobby"><div class="e">☕</div><h4>Ngopi santai</h4><p>Mencari kafe dengan suasana tenang.</p></article>
     <article class="box hobby"><div class="e">🎮</div><h4>Bermain game</h4><p>Pelepas penat di akhir pekan.</p></article>
+    <article class="box hobby"><div class="e">🏃</div><h4>Lari</h4><p>Jaga stamina dan pikiran tetap segar.</p></article>
   </div>
 </div></div>
 
@@ -421,11 +429,20 @@ function el(tag, cls, text){ const e = document.createElement(tag); if (cls) e.c
 let toastTimer;
 function toast(msg){ const t = $("toast"); t.textContent = msg; t.classList.add("show"); clearTimeout(toastTimer); toastTimer = setTimeout(() => t.classList.remove("show"), 2600); }
 
-/* ============ FOTO: abu-abu, berwarna saat disentuh mouse ============ */
+/* ============ FOTO: abu-abu, berwarna hanya di area spotlight mouse ============ */
 (function(){
-  const p = $("photo"); let t;
-  p.addEventListener("touchstart", () => { clearTimeout(t); p.classList.add("color"); }, {passive:true});
-  p.addEventListener("touchend", () => { t = setTimeout(() => p.classList.remove("color"), 1500); }, {passive:true});
+  const box = $("photo"), im = $("pimg");
+  const move = e => {
+    const r = im.getBoundingClientRect();
+    im.style.setProperty("--px", (e.clientX - r.left) + "px");
+    im.style.setProperty("--py", (e.clientY - r.top) + "px");
+    im.classList.add("on");
+  };
+  box.addEventListener("pointerenter", move);
+  box.addEventListener("pointermove", move);
+  box.addEventListener("pointerdown", move);
+  ["pointerleave","pointercancel"].forEach(ev => box.addEventListener(ev, () => im.classList.remove("on")));
+  box.addEventListener("pointerup", e => { if (e.pointerType !== "mouse") setTimeout(() => im.classList.remove("on"), 1200); });
 })();
 
 /* ============ MODAL & NAV ============ */
@@ -448,7 +465,8 @@ $("burger").onclick = () => $("mobile").classList.toggle("open");
 const THEMES = {
   maroon:  {acc:"#e50914", rgb:"229,9,20",  text:"#ff6b72", b1:"#080203", b2:"#630a10", b3:"#120305", name:"Maroon"},
   emerald: {acc:"#059669", rgb:"5,150,105",  text:"#34d399", b1:"#02120a", b2:"#064e3b", b3:"#02180e", name:"Hijau"},
-  purple:  {acc:"#7c3aed", rgb:"124,58,237", text:"#a78bfa", b1:"#0d0212", b2:"#4c1d95", b3:"#14041e", name:"Ungu"}
+  purple:  {acc:"#7c3aed", rgb:"124,58,237", text:"#a78bfa", b1:"#0d0212", b2:"#4c1d95", b3:"#14041e", name:"Ungu"},
+  blue:    {acc:"#2563eb", rgb:"37,99,235",  text:"#60a5fa", b1:"#020712", b2:"#12317a", b3:"#040b1c", name:"Biru"}
 };
 function setTheme(k, quiet){
   const t = THEMES[k]; if (!t) return;
